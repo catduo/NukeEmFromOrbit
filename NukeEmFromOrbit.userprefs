@@ -1,0 +1,14 @@
+﻿<Properties>
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/GravitationalEffects.cs">
+    <Files>
+      <File FileName="Assets/Scripts/GravitationalEffects.cs" Line="8" Column="40" />
+      <File FileName="Assets/Scripts/FireProjectile.cs" Line="36" Column="140" />
+      <File FileName="Assets/Scripts/PlanetaryControls.cs" Line="36" Column="53" />
+    </Files>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+</Properties>
