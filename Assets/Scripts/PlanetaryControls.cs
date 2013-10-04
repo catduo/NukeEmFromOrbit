@@ -17,7 +17,7 @@ public class PlanetaryControls: MonoBehaviour {
 	public float orbitSpeed;
 	public float revolutionSpeed;
 	public int planetaryHealth = 100;
-	public TextMesh heathText;
+	public TextMesh healthText;
 	public int player;
 	public int otherPlayer;
 	
@@ -97,7 +97,7 @@ public class PlanetaryControls: MonoBehaviour {
 	
 	void OnCollisionEnter(Collision collision){
 		planetaryHealth -= collision.transform.GetComponent<Projectile>().damage;
-		heathText.text = planetaryHealth.ToString();
+		healthText.text = planetaryHealth.ToString();
 		if(planetaryHealth < 1){
 			GameState.gameOver = true;
 			GameObject.Find ("GameOverMenu").GetComponent<Dialog>().OpenDialog("the winner is Player " + otherPlayer + "!");

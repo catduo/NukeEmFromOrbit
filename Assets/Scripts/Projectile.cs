@@ -27,7 +27,7 @@ public class Projectile : MonoBehaviour {
 			rigidbody.AddForce(transform.forward * constantVelocity);
 		}
 		for(int i = 0; i < heavenlyBodyParent.childCount; i++){
-			float force = -(heavenlyBodies[i].localScale.x * heavenlyBodies[i].localScale.x * gravitationalConstant / Vector3.SqrMagnitude(new Vector3(transform.position.x - heavenlyBodies[i].position.x, transform.position.y - heavenlyBodies[i].position.y, 0)));
+			float force = -(heavenlyBodies[i].localScale.x * gravitationalConstant / Vector3.SqrMagnitude(new Vector3(transform.position.x - heavenlyBodies[i].position.x, transform.position.y - heavenlyBodies[i].position.y, 0)));
 			Vector3 direction = Vector3.Normalize(new Vector3(transform.position.x - heavenlyBodies[i].position.x, transform.position.y - heavenlyBodies[i].position.y, 0));
 			rigidbody.AddForce(force * direction);
 		}
