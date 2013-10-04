@@ -16,9 +16,21 @@ public class PlanetaryControls: MonoBehaviour {
 	public Material unselectedMaterial;
 	public float orbitSpeed;
 	public float revolutionSpeed;
+	public int planetaryHealth = 100;
+	public TextMesh heathText;
+	public int player;
+	public int otherPlayer;
 	
 	// Use this for initialization
 	void Start () {
+		if(transform.position.x < 0){
+			player = 1;
+			otherPlayer = 2;
+		}
+		else{
+			player = 2;
+			otherPlayer = 1;
+		}
 		up = transform.FindChild("Up");
 		down = transform.FindChild("Down");
 		left = transform.FindChild("Left");
@@ -81,5 +93,14 @@ public class PlanetaryControls: MonoBehaviour {
 			}
 		}
 		selected.renderer.material = selectedMaterial;
+	}
+	
+	void OnCollisionEnter(Collision collision){
+		planetaryHealth -= collision.transform.GetComponent<Projectile>().damage;
+		heathText.text = planetaryHealth.ToString();
+		if(planetaryHealth < 1){
+			GameState.gameOver = true;
+			GameObject.Find ("GameOverMenu").GetComponent<Dialog>().OpenDialog("the winner is Player " + otherPlayer + "!");
+		}
 	}
 }

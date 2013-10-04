@@ -17,7 +17,14 @@ public class Dialog : MonoBehaviour {
 	}
 	
 	public void OpenDialog(){
+		OpenDialog("");
+	}
+	
+	public void OpenDialog(string text){
 		open = true;
+		if(text != ""){
+			transform.FindChild("Text").GetComponent<TextMesh>().text = text;
+		}
 		Time.timeScale = 0;
 		if(transform.position.x != mainCamera.transform.position.x){
 			transform.position = new Vector3(mainCamera.transform.position.x, mainCamera.transform.position.y, mainCamera.transform.position.z + 3);

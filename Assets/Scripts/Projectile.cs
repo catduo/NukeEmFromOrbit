@@ -8,6 +8,7 @@ public class Projectile : MonoBehaviour {
 	public float initialVelocity = 2F;
 	public float constantVelocity = 0;
 	public float gravitationalConstant = 3F;
+	public int damage = 50;
 	
 	// Use this for initialization
 	void Start () {
