@@ -44,7 +44,7 @@
 	</Reference>
   </ItemGroup>
   <ItemGroup>
-     <Compile Include="Assets\Scripts\FireProjectile.cs" />
+     <Compile Include="Assets\Scripts\Building.cs" />
      <Compile Include="Assets\Scripts\GUI\CloseDialog.cs" />
      <Compile Include="Assets\Scripts\GUI\DPad.cs" />
      <Compile Include="Assets\Scripts\GUI\Dialog.cs" />
@@ -55,6 +55,7 @@
      <Compile Include="Assets\Scripts\GUI\NewGame.cs" />
      <Compile Include="Assets\Scripts\GUI\Popup.cs" />
      <Compile Include="Assets\Scripts\GUI\SwipeCollider.cs" />
+     <Compile Include="Assets\Scripts\HUDSlot.cs" />
      <Compile Include="Assets\Scripts\PlanetaryControls.cs" />
      <Compile Include="Assets\Scripts\Projectile.cs" />
   </ItemGroup>

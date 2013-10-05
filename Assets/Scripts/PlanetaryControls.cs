@@ -4,7 +4,9 @@ using System.Collections;
 public class PlanetaryControls: MonoBehaviour {
 	
 	public GameObject projectile1;
-	public string fire1;
+	public string action;
+	public string upgrade;
+	public string construct;
 	public string switchClock;
 	public string switchCounterClock;
 	private Transform up;
@@ -40,7 +42,7 @@ public class PlanetaryControls: MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		Fire();
+		Action();
 		ChangeCannon();
 	}
 	
@@ -49,50 +51,51 @@ public class PlanetaryControls: MonoBehaviour {
 		transform.RotateAround(transform.parent.position, new Vector3(0,0,1), orbitSpeed);
 	}
 	
-	void Fire() { 
-		if(Input.GetKeyDown(fire1)){
-			selected.GetComponent<FireProjectile>().Fire();
+	void Action() { 
+		if(Input.GetKeyDown(action)){
+			selected.GetComponent<Building>().Action();
+		}
+		if(Input.GetKeyDown(upgrade)){
+			selected.GetComponent<Building>().Upgrade();
+		}
+		if(Input.GetKeyDown(construct)){
+			selected.GetComponent<Building>().Construct();
 		}
 	}
 	
 	void ChangeCannon(){
 		if(Input.GetKeyDown(switchClock)){
+			selected.GetComponent<Building>().UnSelected();
 			if(selected == up){
-				up.renderer.material = unselectedMaterial;
 				selected = right;
 			}
 			else if(selected == right){
-				right.renderer.material = unselectedMaterial;
 				selected = down;
 			}
 			else if(selected == down){
-				down.renderer.material = unselectedMaterial;
 				selected = left;
 			}
 			else if(selected == left){
-				left.renderer.material = unselectedMaterial;
 				selected = up;
 			}
+		selected.GetComponent<Building>().Selected();
 		}
 		if(Input.GetKeyDown(switchCounterClock)){
+			selected.GetComponent<Building>().UnSelected();
 			if(selected == up){
-				up.renderer.material = unselectedMaterial;
 				selected = left;
 			}
 			else if(selected == left){
-				left.renderer.material = unselectedMaterial;
 				selected = down;
 			}
 			else if(selected == down){
-				down.renderer.material = unselectedMaterial;
 				selected = right;
 			}
 			else if(selected == right){
-				right.renderer.material = unselectedMaterial;
 				selected = up;
 			}
 		}
-		selected.renderer.material = selectedMaterial;
+		selected.GetComponent<Building>().Selected();
 	}
 	
 	void OnCollisionEnter(Collision collision){
