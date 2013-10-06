@@ -21,8 +21,9 @@ public class PlanetaryControls: MonoBehaviour {
 	public float orbitSpeed;
 	public float revolutionSpeed;
 	
-	public int planetaryHealth = 100;
+	public float planetaryHealth = 100;
 	public TextMesh healthText;
+	public Transform healthBar;
 	public int playerMoney = 0;
 	public TextMesh moneyText;
 	private float moneyRate = 1;
@@ -33,6 +34,8 @@ public class PlanetaryControls: MonoBehaviour {
 	
 	// Use this for initialization
 	void Start () {
+		healthBar.GetComponent<ProgressBar>().measureCap = planetaryHealth;
+		healthBar.GetComponent<ProgressBar>().measure = planetaryHealth;
 		startPosition = transform.position;
 		lastMoneyTime = 0;
 		if(transform.position.x < 0){
@@ -120,6 +123,7 @@ public class PlanetaryControls: MonoBehaviour {
 	void OnCollisionEnter(Collision collision){
 		planetaryHealth -= collision.transform.GetComponent<Projectile>().damage;
 		healthText.text = planetaryHealth.ToString();
+		healthBar.GetComponent<ProgressBar>().measure = planetaryHealth;
 		if(planetaryHealth < 1){
 			GameState.gameOver = true;
 			GameObject.Find ("GameOverMenu").GetComponent<Dialog>().OpenDialog("the winner is Player " + otherPlayer + "!");
@@ -128,6 +132,12 @@ public class PlanetaryControls: MonoBehaviour {
 	
 	public void Reset () {
 		planetaryHealth = 100;
+		healthBar.GetComponent<ProgressBar>().measureCap = planetaryHealth;
+		healthBar.GetComponent<ProgressBar>().measure = planetaryHealth;
+		up.GetComponent<Building>().Reset();
+		down.GetComponent<Building>().Reset();
+		left.GetComponent<Building>().Reset();
+		right.GetComponent<Building>().Reset();
 		healthText.text = planetaryHealth.ToString();
 		lastMoneyTime = Time.time;
 		playerMoney = 0;

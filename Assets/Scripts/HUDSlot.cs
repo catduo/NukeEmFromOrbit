@@ -23,8 +23,12 @@ public class HUDSlot : MonoBehaviour {
 			Transform buildingListObject = (Transform) Transform.Instantiate(buildingList[i], new Vector3(transform.position.x + 1 * i - 2.5F, transform.position.y, transform.position.z), transform.rotation);
 			buildingListObject.localScale = new Vector3(1 / Mathf.Sqrt(i + 1), 1 / Mathf.Sqrt(i + 1), 1 / Mathf.Sqrt(i + 1));
 			buildingListObject.parent = transform;
+			buildingList[i] = buildingListObject;
 		}
 		selectedType = buildingTypeList[0];
+		for( int i = 0; i < transform.FindChild("ProgressBar").childCount; i++){
+			transform.FindChild("ProgressBar").GetChild(i).renderer.enabled = false;
+		}
 	}
 	
 	// Update is called once per frame
@@ -33,7 +37,12 @@ public class HUDSlot : MonoBehaviour {
 	}
 	
 	public void Construct () {
-		
+		for(int i = 0; i < buildingList.Length; i ++){
+			Destroy(buildingList[i].gameObject);
+		}
+		for( int i = 0; i < transform.FindChild("ProgressBar").childCount; i++){
+			transform.FindChild("ProgressBar").GetChild(i).renderer.enabled = true;
+		}
 	}
 	
 	public void ScrollOnSelect(){
@@ -45,5 +54,19 @@ public class HUDSlot : MonoBehaviour {
 			buildingList[i].localScale = new Vector3(1 / Mathf.Sqrt(i + 1), 1 / Mathf.Sqrt(i + 1), 1 / Mathf.Sqrt(i + 1));
 		}
 		selectedType = buildingTypeList[0];
+	}
+	
+	public void Reset(){
+		buildingList = new Transform[] {cannonBuilding, rocketBuilding, laserBuilding, factoryBuilding, repairBuilding};
+		buildingTypeList = new BuildingType[] {BuildingType.Cannon, BuildingType.Rocket, BuildingType.Laser, BuildingType.Factory, BuildingType.Repair};
+		for(int i = 0; i < buildingList.Length; i++){
+			Transform buildingListObject = (Transform) Transform.Instantiate(buildingList[i], new Vector3(transform.position.x + 1 * i - 2.5F, transform.position.y, transform.position.z), transform.rotation);
+			buildingListObject.localScale = new Vector3(1 / Mathf.Sqrt(i + 1), 1 / Mathf.Sqrt(i + 1), 1 / Mathf.Sqrt(i + 1));
+			buildingListObject.parent = transform;
+		}
+		selectedType = buildingTypeList[0];
+		for( int i = 0; i < transform.FindChild("ProgressBar").childCount; i++){
+			transform.FindChild("ProgressBar").GetChild(i).renderer.enabled = false;
+		}
 	}
 }

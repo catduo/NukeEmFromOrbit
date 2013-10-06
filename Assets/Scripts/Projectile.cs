@@ -8,7 +8,8 @@ public class Projectile : MonoBehaviour {
 	public float initialVelocity = 2F;
 	public float constantVelocity = 0;
 	public float gravitationalConstant = 3F;
-	public int damage = 50;
+	public float damage = 5;
+	public float originalXScale;
 	
 	// Use this for initialization
 	void Start () {
@@ -19,6 +20,7 @@ public class Projectile : MonoBehaviour {
 			heavenlyBodies[i] = heavenlyBodyParent.GetChild(i);
 		}
 		rigidbody.velocity = transform.forward * initialVelocity;
+		damage *= transform.localScale.x / originalXScale;
 	}
 	
 	// Update is called once per frame

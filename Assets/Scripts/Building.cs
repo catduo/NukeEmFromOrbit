@@ -26,14 +26,16 @@ public class Building : MonoBehaviour {
 	public GameObject laser1;
 	private Vector3 fireDirection;
 	private BuildingType thisType = BuildingType.Empty;
-	private int buildingLevel;
+	private float buildingLevel = 0;
 	
 	private float buildingCooldown = 0;
 	public float lastBuildingUse;
 	public bool is_buildingReady = true;
+	private Transform progressBar;
 	
 	// Use this for initialization
 	void Start () {
+		progressBar = hudSlot.FindChild("ProgressBar");
 		lastBuildingUse = Time.time - buildingCooldown;
 	}
 	
@@ -45,16 +47,24 @@ public class Building : MonoBehaviour {
 	public void BuildingReady () {
 		if(buildingCooldown + lastBuildingUse < Time.time){
 			is_buildingReady = true;
+			progressBar.GetComponent<ProgressBar>().measure = buildingCooldown;
+		}
+		else{
+			progressBar.GetComponent<ProgressBar>().measure = Time.time - lastBuildingUse;
 		}
 	}
 	
 	public void Selected() {
-		transform.GetChild(0).renderer.material = selectedMaterial;
+		transform.FindChild("Bracket").renderer.enabled = true;
+		transform.FindChild("Bracket").GetChild(0).renderer.enabled = true;
+		transform.FindChild("Bracket").GetChild(1).renderer.enabled = true;
 		hudSlot.renderer.material = selectedMaterial;
 	}
 	
 	public void UnSelected() {
-		transform.GetChild(0).renderer.material = unSelectedMaterial;
+		transform.FindChild("Bracket").renderer.enabled = false;
+		transform.FindChild("Bracket").GetChild(0).renderer.enabled = false;
+		transform.FindChild("Bracket").GetChild(1).renderer.enabled = false;
 		hudSlot.renderer.material = unSelectedMaterial;
 	}
 	
@@ -62,27 +72,48 @@ public class Building : MonoBehaviour {
 		if(thisType == BuildingType.Empty){
 			hudSlot.GetComponent<HUDSlot>().ScrollOnSelect();
 		}
-	}
-	
-	public void Construct() {
-		if(transform.parent.GetComponent<PlanetaryControls>().playerMoney > (int) hudSlot.GetComponent<HUDSlot>().selectedType){
-			Construct(hudSlot.GetComponent<HUDSlot>().selectedType);
-		}
 		else{
-			NotEnoughFunds();
+			if(transform.parent.GetComponent<PlanetaryControls>().playerMoney > Mathf.RoundToInt((float) hudSlot.GetComponent<HUDSlot>().selectedType * Mathf.Pow(1.5F, buildingLevel))){
+				Construct(hudSlot.GetComponent<HUDSlot>().selectedType);
+				transform.parent.GetComponent<PlanetaryControls>().playerMoney -= Mathf.RoundToInt((float) hudSlot.GetComponent<HUDSlot>().selectedType * Mathf.Pow(1.5F, buildingLevel));
+				transform.parent.GetComponent<PlanetaryControls>().moneyText.text = transform.parent.GetComponent<PlanetaryControls>().playerMoney.ToString();
+				buildingLevel ++;
+			}
+			else{
+				NotEnoughFunds();
+			}
 		}
-	}	
+	}
 	
 	void NotEnoughFunds () {
 		Debug.Log ("not enough funds");
 	}
 	
+	public void Construct() {
+		if(transform.parent.GetComponent<PlanetaryControls>().playerMoney > (int) hudSlot.GetComponent<HUDSlot>().selectedType){
+			Construct(hudSlot.GetComponent<HUDSlot>().selectedType);
+			buildingLevel ++;
+			hudSlot.GetComponent<HUDSlot>().Construct();
+			transform.parent.GetComponent<PlanetaryControls>().playerMoney -= (int) hudSlot.GetComponent<HUDSlot>().selectedType;
+			transform.parent.GetComponent<PlanetaryControls>().moneyText.text = transform.parent.GetComponent<PlanetaryControls>().playerMoney.ToString();
+		}
+		else{
+			NotEnoughFunds();
+		}
+	}	
+
+	
 	public void Construct(BuildingType type){
 		thisType = type;
+		if(type == BuildingType.Empty){
+			buildingLevel = 0;
+		}
 	}
 	
 	public void Action() { 
 		if(is_buildingReady){
+			progressBar.GetComponent<ProgressBar>().measure = 1;
+			progressBar.GetComponent<ProgressBar>().measureCap = 1;		
 			is_buildingReady = false;
 			lastBuildingUse = Time.time;
 			switch(thisType){
@@ -109,17 +140,20 @@ public class Building : MonoBehaviour {
 			default:
 				break;
 			}
+			progressBar.GetComponent<ProgressBar>().measureCap = buildingCooldown;	
 		}
 	}
 		
 	void FireCannon () {
-		buildingCooldown = 1;
-		GameObject newProjectile = (GameObject) Instantiate(cannon1, transform.position * 2.3F - transform.parent.position * 1.3F, Quaternion.LookRotation(transform.up));
+		buildingCooldown = 1;	
+		GameObject newProjectile = (GameObject) Instantiate(cannon1, transform.position + (transform.position - transform.parent.position) * 1.3F * (1 + (0.1F * buildingLevel)), Quaternion.LookRotation(transform.up));
+		newProjectile.transform.localScale *= (1 + (0.5F * (buildingLevel - 1)));
 	}
 	
 	void FireRocket () {
 		buildingCooldown = 3;
-		GameObject newProjectile = (GameObject) Instantiate(rocket1, transform.position * 2.3F - transform.parent.position * 1.3F, Quaternion.LookRotation(transform.up));
+		GameObject newProjectile = (GameObject) Instantiate(rocket1, transform.position + (transform.position - transform.parent.position) * 1.3F * (1 + (0.1F * buildingLevel)), Quaternion.LookRotation(transform.up));
+		newProjectile.transform.localScale *= (1 + (0.5F * (buildingLevel - 1)));
 	}
 	
 	void CollectFactory () {
@@ -136,6 +170,12 @@ public class Building : MonoBehaviour {
 	
 	void FireLaser () {
 		buildingCooldown = 0;
-		GameObject newProjectile = (GameObject) Instantiate(laser1, transform.position * 2.3F - transform.parent.position * 1.3F, Quaternion.LookRotation(transform.up));
+		GameObject newProjectile = (GameObject) Instantiate(laser1, transform.position + (transform.position - transform.parent.position) * 1.3F * (1 + (0.25F * buildingLevel)), Quaternion.LookRotation(transform.up));
+		newProjectile.transform.localScale *= (1 + (0.5F * (buildingLevel - 1)));
+	}
+	
+	public void Reset () {
+		Construct(BuildingType.Empty);
+		hudSlot.GetComponent<HUDSlot>().Reset();
 	}
 }
