@@ -5,6 +5,7 @@ public class NewGame : MonoBehaviour {
 	
 	public GameObject planet1;
 	public GameObject planet2;
+	public Transform projectiles;
 	
 	// Use this for initialization
 	void Start () {
@@ -17,10 +18,11 @@ public class NewGame : MonoBehaviour {
 	}
 	
 	void Tap () {
-		planet1.GetComponent<PlanetaryControls>().planetaryHealth = 100;
-		planet2.GetComponent<PlanetaryControls>().planetaryHealth = 100;
-		planet1.GetComponent<PlanetaryControls>().healthText.text = "100";
-		planet2.GetComponent<PlanetaryControls>().healthText.text = "100";
+		planet1.GetComponent<PlanetaryControls>().Reset ();
+		planet2.GetComponent<PlanetaryControls>().Reset ();
 		transform.parent.GetComponent<Dialog>().CloseDialog();
+		for (int i = 0; i < projectiles.childCount; i++){
+			Destroy(projectiles.GetChild(i).gameObject);
+		}
 	}
 }

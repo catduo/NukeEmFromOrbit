@@ -3,28 +3,38 @@ using System.Collections;
 
 public class PlanetaryControls: MonoBehaviour {
 	
-	public GameObject projectile1;
 	public string action;
 	public string upgrade;
 	public string construct;
 	public string switchClock;
 	public string switchCounterClock;
+	
 	private Transform up;
 	private Transform down;
 	private Transform left;
 	private Transform right;
 	private Transform selected;
+	
 	public Material selectedMaterial;
 	public Material unselectedMaterial;
+	
 	public float orbitSpeed;
 	public float revolutionSpeed;
+	
 	public int planetaryHealth = 100;
 	public TextMesh healthText;
+	public int playerMoney = 0;
+	public TextMesh moneyText;
+	private float moneyRate = 1;
+	private float lastMoneyTime;
 	public int player;
 	public int otherPlayer;
+	private Vector3 startPosition;
 	
 	// Use this for initialization
 	void Start () {
+		startPosition = transform.position;
+		lastMoneyTime = 0;
 		if(transform.position.x < 0){
 			player = 1;
 			otherPlayer = 2;
@@ -42,8 +52,17 @@ public class PlanetaryControls: MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+		Income();
 		Action();
-		ChangeCannon();
+		ChangeSelected();
+	}
+	
+	void Income(){
+		if(lastMoneyTime + moneyRate < Time.time){
+			playerMoney++;
+			moneyText.text = playerMoney.ToString();
+			lastMoneyTime = Time.time;
+		}
 	}
 	
 	void FixedUpdate(){
@@ -63,7 +82,7 @@ public class PlanetaryControls: MonoBehaviour {
 		}
 	}
 	
-	void ChangeCannon(){
+	void ChangeSelected(){
 		if(Input.GetKeyDown(switchClock)){
 			selected.GetComponent<Building>().UnSelected();
 			if(selected == up){
@@ -105,5 +124,13 @@ public class PlanetaryControls: MonoBehaviour {
 			GameState.gameOver = true;
 			GameObject.Find ("GameOverMenu").GetComponent<Dialog>().OpenDialog("the winner is Player " + otherPlayer + "!");
 		}
+	}
+	
+	public void Reset () {
+		planetaryHealth = 100;
+		healthText.text = planetaryHealth.ToString();
+		lastMoneyTime = Time.time;
+		playerMoney = 0;
+		transform.position = startPosition;
 	}
 }
