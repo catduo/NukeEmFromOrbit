@@ -28,7 +28,7 @@ public class Building : MonoBehaviour {
 	private BuildingType thisType = BuildingType.Empty;
 	private float buildingLevel = 0;
 	
-	private float buildingCooldown = 0;
+	private float buildingCooldown = 0.1F;
 	public float lastBuildingUse;
 	public bool is_buildingReady = true;
 	private Transform progressBar;
@@ -36,6 +36,8 @@ public class Building : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		progressBar = hudSlot.FindChild("ProgressBar");
+		progressBar.GetComponent<ProgressBar>().measure = 1;
+		progressBar.GetComponent<ProgressBar>().measureCap = 1;
 		lastBuildingUse = Time.time - buildingCooldown;
 	}
 	
@@ -90,15 +92,17 @@ public class Building : MonoBehaviour {
 	}
 	
 	public void Construct() {
-		if(transform.parent.GetComponent<PlanetaryControls>().playerMoney > (int) hudSlot.GetComponent<HUDSlot>().selectedType){
-			Construct(hudSlot.GetComponent<HUDSlot>().selectedType);
-			buildingLevel ++;
-			hudSlot.GetComponent<HUDSlot>().Construct();
-			transform.parent.GetComponent<PlanetaryControls>().playerMoney -= (int) hudSlot.GetComponent<HUDSlot>().selectedType;
-			transform.parent.GetComponent<PlanetaryControls>().moneyText.text = transform.parent.GetComponent<PlanetaryControls>().playerMoney.ToString();
-		}
-		else{
-			NotEnoughFunds();
+		if(thisType == BuildingType.Empty){
+			if(transform.parent.GetComponent<PlanetaryControls>().playerMoney > (int) hudSlot.GetComponent<HUDSlot>().selectedType){
+				Construct(hudSlot.GetComponent<HUDSlot>().selectedType);
+				buildingLevel ++;
+				hudSlot.GetComponent<HUDSlot>().Construct();
+				transform.parent.GetComponent<PlanetaryControls>().playerMoney -= (int) hudSlot.GetComponent<HUDSlot>().selectedType;
+				transform.parent.GetComponent<PlanetaryControls>().moneyText.text = transform.parent.GetComponent<PlanetaryControls>().playerMoney.ToString();
+			}
+			else{
+				NotEnoughFunds();
+			}
 		}
 	}	
 
@@ -175,6 +179,8 @@ public class Building : MonoBehaviour {
 	}
 	
 	public void Reset () {
+		progressBar.GetComponent<ProgressBar>().measure = 1;
+		progressBar.GetComponent<ProgressBar>().measureCap = 1;
 		Construct(BuildingType.Empty);
 		hudSlot.GetComponent<HUDSlot>().Reset();
 	}

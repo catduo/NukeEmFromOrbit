@@ -1,16 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public struct GameStateValues{
-	public int money, upLevel, downLevel, leftLevel, rightLevel, selected, upType, downType, leftType, rightType;
-	public float health;
-}
-
 public class PlanetaryControls: MonoBehaviour {
-	
-	public GameStateValues thisGSV;
-	private string[] selectionOptions = {"up", "down", "left", "right"};
-	private BuildingType[] buildingTypes = {BuildingType.Empty, BuildingType.Cannon, BuildingType.Rocket, BuildingType.Laser, BuildingType.Factory, BuildingType.Repair};
 	
 	public string action;
 	public string upgrade;
@@ -67,8 +58,10 @@ public class PlanetaryControls: MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		Income();
-		Action();
-		ChangeSelected();
+		if(!is_remote){
+			Action();
+			ChangeSelected();
+		}
 	}
 	
 	public void Remote(string remoteValue){
@@ -96,39 +89,67 @@ public class PlanetaryControls: MonoBehaviour {
 			GetAction ();
 		}
 		if(Input.GetKeyDown(upgrade)){
+			GetUpgrade ();
 			selected.GetComponent<Building>().Upgrade();
 		}
 		if(Input.GetKeyDown(construct)){
-			selected.GetComponent<Building>().Construct();
+			GetConstruct ();
 		}
 	}
 	
 	[RPC] void GetAction () {
+		Debug.Log ("up");
 		selected.GetComponent<Building>().Action();
 		if(!is_remote){
-			networkView.RPC("GetAction", RPCMode.Server);
+			networkView.RPC("GetAction", RPCMode.Others);
+		}
+	}
+	
+	[RPC] void GetUpgrade () {
+		selected.GetComponent<Building>().Upgrade();
+		if(!is_remote){
+			networkView.RPC("GetUpgrade", RPCMode.Others);
+		}
+	}
+	
+	[RPC] void GetConstruct () {
+		selected.GetComponent<Building>().Construct();
+		if(!is_remote){
+			networkView.RPC("GetConstruct", RPCMode.Others);
 		}
 	}
 	
 	void ChangeSelected(){
 		if(Input.GetKeyDown(switchClock)){
-			selected.GetComponent<Building>().UnSelected();
-			if(selected == up){
-				selected = right;
-			}
-			else if(selected == right){
-				selected = down;
-			}
-			else if(selected == down){
-				selected = left;
-			}
-			else if(selected == left){
-				selected = up;
-			}
-		selected.GetComponent<Building>().Selected();
+			GetChangeClock () ;
 		}
 		if(Input.GetKeyDown(switchCounterClock)){
-			selected.GetComponent<Building>().UnSelected();
+			GetChangeCounterClock ();
+		}
+	}
+	
+	[RPC] void GetChangeClock () {
+		selected.GetComponent<Building>().UnSelected();
+			if(selected == up){
+				selected = right;
+			}
+			else if(selected == right){
+				selected = down;
+			}
+			else if(selected == down){
+				selected = left;
+			}
+			else if(selected == left){
+				selected = up;
+			}
+		selected.GetComponent<Building>().Selected();
+		if(!is_remote){
+			networkView.RPC("GetChangeClock", RPCMode.Others);
+		}
+	}
+	
+	[RPC] void GetChangeCounterClock () {
+		selected.GetComponent<Building>().UnSelected();
 			if(selected == up){
 				selected = left;
 			}
@@ -141,8 +162,10 @@ public class PlanetaryControls: MonoBehaviour {
 			else if(selected == right){
 				selected = up;
 			}
-		}
 		selected.GetComponent<Building>().Selected();
+		if(!is_remote){
+			networkView.RPC("GetChangeCounterClock", RPCMode.Others);
+		}
 	}
 	
 	void OnCollisionEnter(Collision collision){
@@ -160,7 +183,7 @@ public class PlanetaryControls: MonoBehaviour {
 			GameObject.Find ("GameOverMenu").GetComponent<Dialog>().OpenDialog("the winner is Player " + otherPlayer + "!");
 		}
 		if((player == 1 && !is_remote) || (player == 2 && is_remote)){
-			
+			networkView.RPC("BulletCollision", RPCMode.Others, collision);
 		}
 	}
 	
@@ -176,77 +199,5 @@ public class PlanetaryControls: MonoBehaviour {
 		lastMoneyTime = Time.time;
 		playerMoney = 0;
 		transform.position = startPosition;
-	}
-	
-	void UpdateGSV (GameStateValues newGSV) {
-		if(newGSV.money != thisGSV.money){
-			Debug.Log ("spent money");
-		}
-		if(newGSV.upLevel != thisGSV.upLevel){
-			Debug.Log ("changed up");
-		}
-		if(newGSV.downLevel != thisGSV.downLevel){
-			Debug.Log ("changed down");
-		}
-		if(newGSV.rightLevel != thisGSV.rightLevel){
-			Debug.Log ("changed right");
-		}
-		if(newGSV.leftLevel != thisGSV.leftLevel){
-			Debug.Log ("changed left");
-		}
-		if(newGSV.health != thisGSV.health){
-			Debug.Log ("changed health");
-		}
-		if(newGSV.selected != thisGSV.selected){
-			Debug.Log ("changed selected");
-		}
-		if(newGSV.upType != thisGSV.upType){
-			Debug.Log ("changed uptype");
-		}
-		if(newGSV.downType != thisGSV.downType){
-			Debug.Log ("changed downtype");
-		}
-		if(newGSV.rightType != thisGSV.rightType){
-			Debug.Log ("changed righttype");
-		}
-		if(newGSV.leftType != thisGSV.leftType){
-			Debug.Log ("changed lefttype");
-		}
-	}
-	
-	void OnSerializeNetworkView(BitStream stream, NetworkMessageInfo info)
-	{
-		GameStateValues syncGSV = new GameStateValues();
-	    if (stream.isWriting)
-	    {
-	        syncGSV = thisGSV;
-	        stream.Serialize(ref syncGSV.money);
-	        stream.Serialize(ref syncGSV.upLevel);
-	        stream.Serialize(ref syncGSV.downLevel);
-	        stream.Serialize(ref syncGSV.rightLevel);
-	        stream.Serialize(ref syncGSV.leftLevel);
-	        stream.Serialize(ref syncGSV.health);
-	        stream.Serialize(ref syncGSV.selected);
-	        stream.Serialize(ref syncGSV.upType);
-	        stream.Serialize(ref syncGSV.downType);
-	        stream.Serialize(ref syncGSV.rightType);
-	        stream.Serialize(ref syncGSV.leftType);
-	    }
-	    else
-	    {
-	        stream.Serialize(ref syncGSV.money);
-	        stream.Serialize(ref syncGSV.upLevel);
-	        stream.Serialize(ref syncGSV.downLevel);
-	        stream.Serialize(ref syncGSV.rightLevel);
-	        stream.Serialize(ref syncGSV.leftLevel);
-	        stream.Serialize(ref syncGSV.health);
-	        stream.Serialize(ref syncGSV.selected);
-	        stream.Serialize(ref syncGSV.upType);
-	        stream.Serialize(ref syncGSV.downType);
-	        stream.Serialize(ref syncGSV.rightType);
-	        stream.Serialize(ref syncGSV.leftType);
-			UpdateGSV(syncGSV);
-			thisGSV = syncGSV;
-	    }
 	}
 }
