@@ -6,6 +6,8 @@ public class NewGame : MonoBehaviour {
 	private GameObject planet1;
 	private GameObject planet2;
 	public Transform projectiles;
+	static public bool is_gameStarted = false;
+	static public int readyCount = 0;
 	
 	// Use this for initialization
 	void Start () {
@@ -18,12 +20,14 @@ public class NewGame : MonoBehaviour {
 		
 	}
 	
-	void Tap () {
+	public void Tap () {
 		planet1.GetComponent<PlanetaryControls>().Reset ();
 		planet2.GetComponent<PlanetaryControls>().Reset ();
 		transform.parent.GetComponent<Dialog>().CloseDialog();
 		for (int i = 0; i < projectiles.childCount; i++){
 			Destroy(projectiles.GetChild(i).gameObject);
 		}
+		is_gameStarted = true;
+		readyCount = 0;
 	}
 }

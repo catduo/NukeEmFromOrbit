@@ -32,6 +32,7 @@ public class PlanetaryControls: MonoBehaviour {
 	private Vector3 startPosition;
 	private bool is_remote = false;
 	private bool is_client = false;
+	private bool is_gameStarted = false;
 	
 	// Use this for initialization
 	void Start () {
@@ -198,10 +199,24 @@ public class PlanetaryControls: MonoBehaviour {
 		if(planetaryHealth < 1){
 			GameState.gameOver = true;
 			GameObject.Find ("GameOverMenu").GetComponent<Dialog>().OpenDialog("the winner is Player " + otherPlayer + "!");
+			NewGame.is_gameStarted = false;
+			GameObject.Find ("MainCamera").GetComponent<NetworkManager>().Disconnect();
 		}
 		if((player == 1 && !is_remote) || (player == 2 && is_remote)){
 			networkView.RPC("BulletCollision", RPCMode.Others, collision.transform.GetComponent<Projectile>().damage);
 		}
+	}
+	
+	[RPC] public void StartGame () {
+		GameObject.Find ("NewGame").GetComponent<NewGame>().Tap();
+		if(!is_client){
+			networkView.RPC("StartGame", RPCMode.Others);
+		}
+	}	
+	
+	[RPC] public void Ready () {
+		NewGame.readyCount++;
+		networkView.RPC("Ready", RPCMode.Others);
 	}
 	
 	public void Reset () {
