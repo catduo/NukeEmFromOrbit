@@ -207,17 +207,14 @@ public class PlanetaryControls: MonoBehaviour {
 		}
 	}
 	
-	[RPC] public void StartGame () {
-		GameObject.Find ("NewGame").GetComponent<NewGame>().Tap();
-		if(!is_client){
-			networkView.RPC("StartGame", RPCMode.Others);
-		}
-	}	
-	
 	[RPC] public void Ready () {
 		NewGame.readyCount++;
-		if(!is_client){
+		if(NewGame.readyCount == 1){
 			networkView.RPC("Ready", RPCMode.Others);
+		}
+		else{
+			networkView.RPC("Ready", RPCMode.Others);
+			GameObject.Find ("NewGame").GetComponent<NewGame>().Tap();
 		}
 	}
 	

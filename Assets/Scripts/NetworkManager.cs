@@ -91,9 +91,6 @@ public class NetworkManager : MonoBehaviour {
 		else if (NewGame.readyCount == 1 && !is_looking && is_online){
 			GUI.Box(new Rect(100,100,250,100), "Waiting for other Players...");
 		}
-		else if (NewGame.is_gameStarted == false && is_online && !is_looking){
-			GameObject.Find ("NewGame").GetComponent<NewGame>().Tap();
-		}
 	}
 	private HostData[] hostList = new HostData[] {};
 	 
