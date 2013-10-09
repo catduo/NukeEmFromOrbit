@@ -3,13 +3,14 @@ using System.Collections;
 
 public class NewGame : MonoBehaviour {
 	
-	public GameObject planet1;
-	public GameObject planet2;
+	private GameObject planet1;
+	private GameObject planet2;
 	public Transform projectiles;
 	
 	// Use this for initialization
 	void Start () {
-	
+		planet1 = GameObject.Find ("Player1Planet");
+		planet2 = GameObject.Find ("Player2Planet");
 	}
 	
 	// Update is called once per frame

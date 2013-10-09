@@ -5,6 +5,8 @@ public class NetworkManager : MonoBehaviour {
 	
 	private const string typeName = "NukeEmFromOrbit";
 	private const string gameName = "David";
+	public Transform player1Planet;
+	public Transform player2Planet;
 	 
 	private void StartServer()
 	{
@@ -15,7 +17,7 @@ public class NetworkManager : MonoBehaviour {
 	void OnServerInitialized()
 	{
 	    Debug.Log("Server Initializied");
-		GameObject.Find ("Player2Planet").GetComponent<PlanetaryControls>().Remote("server");
+		player2Planet.GetComponent<PlanetaryControls>().Remote("server");
 	}
 	// Use this for initialization
 	void Start () {
@@ -72,6 +74,6 @@ public class NetworkManager : MonoBehaviour {
 	void OnConnectedToServer()
 	{
 	    Debug.Log("Server Joined");
-		GameObject.Find ("Player1Planet").GetComponent<PlanetaryControls>().Remote("client");
+		player1Planet.GetComponent<PlanetaryControls>().Remote("client");
 	}
 }

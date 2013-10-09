@@ -15,15 +15,13 @@ public class PlanetaryControls: MonoBehaviour {
 	private Transform right;
 	private Transform selected;
 	
-	public Material selectedMaterial;
-	public Material unselectedMaterial;
+	public Transform statusArea;
 	
 	public float orbitSpeed;
 	public float revolutionSpeed;
 	
 	public float planetaryHealth = 100;
-	public TextMesh healthText;
-	public Transform healthBar;
+	private Transform healthBar;
 	public int playerMoney = 0;
 	public TextMesh moneyText;
 	private float moneyRate = 1;
@@ -36,6 +34,8 @@ public class PlanetaryControls: MonoBehaviour {
 	
 	// Use this for initialization
 	void Start () {
+		healthBar = statusArea.FindChild("HealthBar");
+		moneyText = statusArea.FindChild("Money").GetComponent<TextMesh>();
 		healthBar.GetComponent<ProgressBar>().measureCap = planetaryHealth;
 		healthBar.GetComponent<ProgressBar>().measure = planetaryHealth;
 		startPosition = transform.position;
@@ -74,7 +74,7 @@ public class PlanetaryControls: MonoBehaviour {
 	void Income(){
 		if(lastMoneyTime + moneyRate < Time.time){
 			playerMoney++;
-			moneyText.text = playerMoney.ToString();
+			moneyText.text = "&" + playerMoney.ToString();
 			lastMoneyTime = Time.time;
 		}
 	}
@@ -90,7 +90,6 @@ public class PlanetaryControls: MonoBehaviour {
 		}
 		if(Input.GetKeyDown(upgrade)){
 			GetUpgrade ();
-			selected.GetComponent<Building>().Upgrade();
 		}
 		if(Input.GetKeyDown(construct)){
 			GetConstruct ();
@@ -98,7 +97,6 @@ public class PlanetaryControls: MonoBehaviour {
 	}
 	
 	[RPC] void GetAction () {
-		Debug.Log ("up");
 		selected.GetComponent<Building>().Action();
 		if(!is_remote){
 			networkView.RPC("GetAction", RPCMode.Others);
@@ -174,16 +172,24 @@ public class PlanetaryControls: MonoBehaviour {
 		}
 	}
 	
+	[RPC] void BulletCollision (float damage){
+		planetaryHealth -= damage;
+		healthBar.GetComponent<ProgressBar>().measure = planetaryHealth;
+		if(planetaryHealth < 1){
+			GameState.gameOver = true;
+			GameObject.Find ("GameOverMenu").GetComponent<Dialog>().OpenDialog("the winner is Player " + otherPlayer + "!");
+		}
+	}
+	
 	[RPC] void BulletCollision (Collision collision) {
 		planetaryHealth -= collision.transform.GetComponent<Projectile>().damage;
-		healthText.text = planetaryHealth.ToString();
 		healthBar.GetComponent<ProgressBar>().measure = planetaryHealth;
 		if(planetaryHealth < 1){
 			GameState.gameOver = true;
 			GameObject.Find ("GameOverMenu").GetComponent<Dialog>().OpenDialog("the winner is Player " + otherPlayer + "!");
 		}
 		if((player == 1 && !is_remote) || (player == 2 && is_remote)){
-			networkView.RPC("BulletCollision", RPCMode.Others, collision);
+			networkView.RPC("BulletCollision", RPCMode.Others, collision.transform.GetComponent<Projectile>().damage);
 		}
 	}
 	
@@ -195,7 +201,6 @@ public class PlanetaryControls: MonoBehaviour {
 		down.GetComponent<Building>().Reset();
 		left.GetComponent<Building>().Reset();
 		right.GetComponent<Building>().Reset();
-		healthText.text = planetaryHealth.ToString();
 		lastMoneyTime = Time.time;
 		playerMoney = 0;
 		transform.position = startPosition;
