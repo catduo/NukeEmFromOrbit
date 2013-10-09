@@ -3,12 +3,12 @@ using System.Collections;
 
 public class OtherPlanets : MonoBehaviour {
 	
-	public float revolutionSpeed = 4F;
+	private Vector3 startPosition;
 	public float orbitSpeed = 0.5F;
 	
 	// Use this for initialization
 	void Start () {
-	
+		startPosition = transform.position;
 	}
 	
 	// Update is called once per frame
@@ -17,7 +17,10 @@ public class OtherPlanets : MonoBehaviour {
 	}	
 	
 	void FixedUpdate(){
-		transform.Rotate(new Vector3(0, 0, revolutionSpeed));
 		transform.RotateAround(transform.parent.position, new Vector3(0,0,1), orbitSpeed);
+	}
+	
+	void Reset(){
+		transform.position = startPosition;
 	}
 }

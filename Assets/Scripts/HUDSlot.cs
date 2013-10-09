@@ -11,6 +11,7 @@ public class HUDSlot : MonoBehaviour {
 	private TextMesh title;
 	private int selectedTitle = 0;
 	private Transform[] buildingList;
+	private Transform[] buildingPrefabList;
 	private BuildingType[] buildingTypeList;
 	private string[] titles;
 	private bool is_built;
@@ -22,10 +23,11 @@ public class HUDSlot : MonoBehaviour {
 		titles = new string[] {"Cannon", "Rocket", "Laser", "Factory", "Repair"};
 		title = transform.FindChild("Title").GetComponent<TextMesh>();
 		title.text = "Construct " + titles [selectedTitle];
-		buildingList = new Transform[] {cannonBuilding, rocketBuilding, laserBuilding, factoryBuilding, repairBuilding};
+		buildingPrefabList = new Transform[] {cannonBuilding, rocketBuilding, laserBuilding, factoryBuilding, repairBuilding};
+		buildingList = new Transform[5];
 		buildingTypeList = new BuildingType[] {BuildingType.Cannon, BuildingType.Rocket, BuildingType.Laser, BuildingType.Factory, BuildingType.Repair};
 		for(int i = 0; i < buildingList.Length; i++){
-			Transform buildingListObject = (Transform) Transform.Instantiate(buildingList[i], new Vector3(transform.position.x + 1 * i - 2F, transform.position.y - 0.05F * i, transform.position.z), transform.rotation);
+			Transform buildingListObject = (Transform) Transform.Instantiate(buildingPrefabList[i], new Vector3(transform.position.x + 1 * i - 2F, transform.position.y - 0.05F * i, transform.position.z), transform.rotation);
 			buildingListObject.parent = transform;
 			buildingListObject.localScale = new Vector3(1 / Mathf.Sqrt(i + 1)/ transform.lossyScale.x, 1 / Mathf.Sqrt(i + 1)/transform.lossyScale.y, 1 / Mathf.Sqrt(i + 1)/transform.lossyScale.z);
 			buildingList[i] = buildingListObject;
@@ -76,12 +78,22 @@ public class HUDSlot : MonoBehaviour {
 	}
 	
 	public void Reset(){
-		buildingList = new Transform[] {cannonBuilding, rocketBuilding, laserBuilding, factoryBuilding, repairBuilding};
+		for(int i = 0; i < buildingList.Length; i ++){
+			if(buildingList[i] != null){
+				Destroy(buildingList[i].gameObject);
+			}
+		}
+		titles = new string[] {"Cannon", "Rocket", "Laser", "Factory", "Repair"};
+		selectedTitle = 0;
+		title = transform.FindChild("Title").GetComponent<TextMesh>();
+		title.text = "Construct " + titles [selectedTitle];
+		buildingList = new Transform[5];
 		buildingTypeList = new BuildingType[] {BuildingType.Cannon, BuildingType.Rocket, BuildingType.Laser, BuildingType.Factory, BuildingType.Repair};
-		for(int i = 0; i < buildingList.Length; i++){
-			Transform buildingListObject = (Transform) Transform.Instantiate(buildingList[i], new Vector3(transform.position.x + 1 * i - 2F, transform.position.y - 0.05F * i, transform.position.z), transform.rotation);
+		for(int i = 0; i < buildingPrefabList.Length; i++){
+			Transform buildingListObject = (Transform) Transform.Instantiate(buildingPrefabList[i], new Vector3(transform.position.x + 1 * i - 2F, transform.position.y - 0.05F * i, transform.position.z), transform.rotation);
 			buildingListObject.parent = transform;
 			buildingListObject.localScale = new Vector3(1 / Mathf.Sqrt(i + 1)/ transform.lossyScale.x, 1 / Mathf.Sqrt(i + 1)/transform.lossyScale.y, 1 / Mathf.Sqrt(i + 1)/transform.lossyScale.z);
+			buildingList[i] = buildingListObject;
 		}
 		selectedType = buildingTypeList[0];
 		for( int i = 0; i < transform.FindChild("ProgressBar").childCount; i++){

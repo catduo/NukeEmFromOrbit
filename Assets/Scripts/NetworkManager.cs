@@ -7,7 +7,7 @@ public class NetworkManager : MonoBehaviour {
 	private const string gameName = "NukeEmFromOrbit";
 	public Transform player1Planet;
 	public Transform player2Planet;
-	private float waitTime;
+	private float waitTime = 0.5F;
 	private float lastTry;
 	private bool is_online = false;
 	private bool is_local = false;
@@ -41,12 +41,12 @@ public class NetworkManager : MonoBehaviour {
 	void Update () {
 		if(is_online && Network.connections.Length == 0){
 			if(waitTime + lastTry < Time.time){
-				if(connectionAttempts > 3){
+				if(connectionAttempts > 8){
 					Disconnect();
 				}
 				if(is_tryHosting){
 					StartServer();
-					lastTry = Time.time + 5;
+					lastTry = Time.time + 5 * waitTime;
 					is_tryHosting = false;
 				}
 				else{
@@ -91,7 +91,7 @@ public class NetworkManager : MonoBehaviour {
 		else if (NewGame.readyCount == 1){
 			GUI.Box(new Rect(100,100,250,100), "Waiting for other Players...");
 		}
-		else if (NewGame.is_gameStarted == false){
+		else if (NewGame.is_gameStarted == false && is_online){
 			GameObject.Find ("NewGame").GetComponent<NewGame>().Tap();
 		}
 	}

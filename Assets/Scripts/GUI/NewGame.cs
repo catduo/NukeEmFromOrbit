@@ -3,16 +3,14 @@ using System.Collections;
 
 public class NewGame : MonoBehaviour {
 	
-	private GameObject planet1;
-	private GameObject planet2;
+	private GameObject heavenlyBodies;
 	public Transform projectiles;
 	static public bool is_gameStarted = false;
 	static public int readyCount = 0;
 	
 	// Use this for initialization
 	void Start () {
-		planet1 = GameObject.Find ("Player1Planet");
-		planet2 = GameObject.Find ("Player2Planet");
+		heavenlyBodies = GameObject.Find ("HeavenlyBodies");
 	}
 	
 	// Update is called once per frame
@@ -21,8 +19,9 @@ public class NewGame : MonoBehaviour {
 	}
 	
 	public void Tap () {
-		planet1.GetComponent<PlanetaryControls>().Reset ();
-		planet2.GetComponent<PlanetaryControls>().Reset ();
+		for(int i = 0; i < heavenlyBodies.transform.childCount; i ++){
+			heavenlyBodies.transform.GetChild(i).SendMessage("Reset", SendMessageOptions.DontRequireReceiver);
+		}
 		transform.parent.GetComponent<Dialog>().CloseDialog();
 		for (int i = 0; i < projectiles.childCount; i++){
 			Destroy(projectiles.GetChild(i).gameObject);
