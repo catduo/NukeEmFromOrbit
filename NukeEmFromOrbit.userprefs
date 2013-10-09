@@ -1,14 +1,6 @@
 ﻿<Properties>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/Building.cs">
-    <Files>
-      <File FileName="Assets/Scripts/Projectile.cs" Line="6" Column="33" />
-      <File FileName="Assets/Scripts/Building.cs" Line="235" Column="24" />
-      <File FileName="Assets/Scripts/PlanetaryControls.cs" Line="77" Column="11" />
-      <File FileName="Assets/Scripts/NetworkManager.cs" Line="20" Column="11" />
-      <File FileName="Assets/Scripts/GUI/NewGame.cs" Line="13" Column="38" />
-    </Files>
-  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.Workbench />
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
     <BreakpointStore />
   </MonoDevelop.Ide.DebuggingService.Breakpoints>

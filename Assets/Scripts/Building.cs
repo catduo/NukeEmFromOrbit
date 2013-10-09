@@ -91,21 +91,22 @@ public class Building : MonoBehaviour {
 		hudHighlight.renderer.enabled = false;
 	}
 	
-	public void Upgrade() {
+	public void Scroll(int direction){
 		if(thisType == BuildingType.Empty){
-			hudSlot.GetComponent<HUDSlot>().ScrollOnSelect();
+			hudSlot.GetComponent<HUDSlot>().ScrollOnSelect(direction);
+		}
+	}
+	
+	public void Upgrade() {
+		if(transform.parent.GetComponent<PlanetaryControls>().playerMoney > Mathf.RoundToInt((float) hudSlot.GetComponent<HUDSlot>().selectedType * Mathf.Pow(1.5F, buildingLevel))){
+			Construct(hudSlot.GetComponent<HUDSlot>().selectedType);
+			transform.parent.GetComponent<PlanetaryControls>().playerMoney -= Mathf.RoundToInt((float) hudSlot.GetComponent<HUDSlot>().selectedType * Mathf.Pow(1.5F, buildingLevel));
+			transform.parent.GetComponent<PlanetaryControls>().moneyText.text = "&" + transform.parent.GetComponent<PlanetaryControls>().playerMoney.ToString();
+			buildingLevel ++;
+			buildingLevelTextMesh.text = "Lvl" + buildingLevel.ToString();
 		}
 		else{
-			if(transform.parent.GetComponent<PlanetaryControls>().playerMoney > Mathf.RoundToInt((float) hudSlot.GetComponent<HUDSlot>().selectedType * Mathf.Pow(1.5F, buildingLevel))){
-				Construct(hudSlot.GetComponent<HUDSlot>().selectedType);
-				transform.parent.GetComponent<PlanetaryControls>().playerMoney -= Mathf.RoundToInt((float) hudSlot.GetComponent<HUDSlot>().selectedType * Mathf.Pow(1.5F, buildingLevel));
-				transform.parent.GetComponent<PlanetaryControls>().moneyText.text = "&" + transform.parent.GetComponent<PlanetaryControls>().playerMoney.ToString();
-				buildingLevel ++;
-				buildingLevelTextMesh.text = "Lvl" + buildingLevel.ToString();
-			}
-			else{
-				NotEnoughFunds();
-			}
+			NotEnoughFunds();
 		}
 	}
 	
@@ -126,6 +127,9 @@ public class Building : MonoBehaviour {
 			else{
 				NotEnoughFunds();
 			}
+		}
+		else{
+			Upgrade();
 		}
 	}	
 

@@ -4,8 +4,9 @@ using System.Collections;
 public class PlanetaryControls: MonoBehaviour {
 	
 	public string action;
-	public string upgrade;
-	public string construct;
+	public string upgradeConstruct;
+	public string scrollLeft;
+	public string scrollRight;
 	public string switchClock;
 	public string switchCounterClock;
 	
@@ -88,11 +89,14 @@ public class PlanetaryControls: MonoBehaviour {
 		if(Input.GetKeyDown(action)){
 			GetAction ();
 		}
-		if(Input.GetKeyDown(upgrade)){
-			GetUpgrade ();
+		if(Input.GetKeyDown(upgradeConstruct)){
+			GetUpgradeConstruct ();
 		}
-		if(Input.GetKeyDown(construct)){
-			GetConstruct ();
+		if(Input.GetKeyDown(scrollLeft)){
+			GetScroll (-1);
+		}
+		if(Input.GetKeyDown(scrollRight)){
+			GetScroll (1);
 		}
 	}
 	
@@ -103,10 +107,17 @@ public class PlanetaryControls: MonoBehaviour {
 		}
 	}
 	
-	[RPC] void GetUpgrade () {
-		selected.GetComponent<Building>().Upgrade();
+	[RPC] void GetScroll (int direction) {
+		selected.GetComponent<Building>().Scroll(direction);
 		if(!is_remote){
-			networkView.RPC("GetUpgrade", RPCMode.Others);
+			networkView.RPC("GetScroll", RPCMode.Others, direction);
+		}
+	}
+	
+	[RPC] void GetUpgradeConstruct () {
+		selected.GetComponent<Building>().Construct();
+		if(!is_remote){
+			networkView.RPC("GetUpgradeConstruct", RPCMode.Others);
 		}
 	}
 	
