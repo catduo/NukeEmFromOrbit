@@ -88,10 +88,10 @@ public class NetworkManager : MonoBehaviour {
 				GameObject.Find ("Player1Planet").GetComponent<PlanetaryControls>().Ready();
 			}
 		}
-		else if (NewGame.readyCount == 1){
+		else if (NewGame.readyCount == 1 && !is_looking && is_online){
 			GUI.Box(new Rect(100,100,250,100), "Waiting for other Players...");
 		}
-		else if (NewGame.is_gameStarted == false && is_online){
+		else if (NewGame.is_gameStarted == false && is_online && !is_looking){
 			GameObject.Find ("NewGame").GetComponent<NewGame>().Tap();
 		}
 	}

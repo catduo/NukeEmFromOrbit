@@ -216,7 +216,9 @@ public class PlanetaryControls: MonoBehaviour {
 	
 	[RPC] public void Ready () {
 		NewGame.readyCount++;
-		networkView.RPC("Ready", RPCMode.Others);
+		if(!is_client){
+			networkView.RPC("Ready", RPCMode.Others);
+		}
 	}
 	
 	public void Reset () {
@@ -230,5 +232,8 @@ public class PlanetaryControls: MonoBehaviour {
 		lastMoneyTime = Time.time;
 		playerMoney = 0;
 		transform.position = startPosition;
+		selected.GetComponent<Building>().UnSelected();
+		selected = up;
+		selected.GetComponent<Building>().Selected();
 	}
 }
