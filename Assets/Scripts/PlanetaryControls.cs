@@ -191,7 +191,7 @@ public class PlanetaryControls: MonoBehaviour {
 	}
 	
 	[RPC] void BulletCollision (float damage){
-		if(!NetworkManager.is_gameOver){
+		if(!NetworkManager.is_local || !NetworkManager.is_local){
 			planetaryHealth -= damage;
 			healthBar.GetComponent<ProgressBar>().measure = planetaryHealth;
 			if(planetaryHealth < 1){
@@ -209,7 +209,7 @@ public class PlanetaryControls: MonoBehaviour {
 	}
 	
 	[RPC] void BulletCollision (Collision collision) {
-		if(!NetworkManager.is_gameOver){
+		if(!NetworkManager.is_local || !NetworkManager.is_local){
 			planetaryHealth -= collision.transform.GetComponent<Projectile>().damage;
 			healthBar.GetComponent<ProgressBar>().measure = planetaryHealth;
 			if(planetaryHealth < 1){

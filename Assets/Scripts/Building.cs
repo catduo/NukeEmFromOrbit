@@ -70,13 +70,13 @@ public class Building : MonoBehaviour {
 		if(!is_buildingReady){
 			BuildingReady();
 		}
-	}
-	
-	public void BuildingReady () {
-		if(is_actionDelayed && delayTime + delayDuration < Time.time){
+		if(is_actionDelayed && (delayTime + delayDuration < Time.time)){
 			Action ();
 			is_actionDelayed = false;
 		}
+	}
+	
+	public void BuildingReady () {
 		if(buildingCooldown + lastBuildingUse < Time.time){
 			is_buildingReady = true;
 			progressBar.GetComponent<ProgressBar>().measure = buildingCooldown;
