@@ -80,7 +80,7 @@ public class NetworkManager : MonoBehaviour {
 		}
 		else{
 			if(is_instructions){
-		        if (GUI.Button(new Rect(240, 445, 200, 40), "")){
+		        if (GUI.Button(new Rect(300, 560, 200, 40), "")){
 					GameObject.Find ("MainCamera").transform.position = new Vector3 (0,0,-20);
 					is_instructions = false;
 					is_menu = true;
@@ -180,7 +180,7 @@ public class NetworkManager : MonoBehaviour {
 							is_menu = false;
 						}
 					}
-				    if (GUI.Button(new Rect(30, 220, 100, 50), "Menu")){
+				    if (GUI.Button(new Rect(30, 275, 100, 50), "Menu")){
 						if(is_menu){
 							is_menu = false;
 						}
@@ -202,7 +202,7 @@ public class NetworkManager : MonoBehaviour {
 				else{
 					is_menu = false;
 				}
-			    if (GUI.Button(new Rect(30, 220, 100, 50), "Menu")){
+			    if (GUI.Button(new Rect(30, 275, 100, 50), "Menu")){
 					if(is_menu){
 						is_menu = false;
 					}
@@ -211,7 +211,7 @@ public class NetworkManager : MonoBehaviour {
 					}
 				}
 			}
-		    if (GUI.Button(new Rect(30, 220, 100, 50), "Menu")){
+		    if (GUI.Button(new Rect(30, 275, 100, 50), "Menu")){
 				if(is_menu){
 					is_menu = false;
 				}
