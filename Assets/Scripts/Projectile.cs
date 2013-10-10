@@ -36,6 +36,8 @@ public class Projectile : MonoBehaviour {
 	}
 	
 	void OnCollisionEnter(Collision collision) {
-		Destroy(gameObject);
+		if(!(name=="Laser(Clone)" && name==collision.transform.name)){
+			Destroy(gameObject);
+		}
 	}
 }

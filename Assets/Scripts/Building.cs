@@ -104,6 +104,7 @@ public class Building : MonoBehaviour {
 			transform.parent.GetComponent<PlanetaryControls>().moneyText.text = "&" + transform.parent.GetComponent<PlanetaryControls>().playerMoney.ToString();
 			buildingLevel ++;
 			buildingLevelTextMesh.text = "Lvl" + buildingLevel.ToString();
+			hudSlot.GetComponent<HUDSlot>().title.text = "Upgrade " + name + " (&" + Mathf.RoundToInt((float) hudSlot.GetComponent<HUDSlot>().selectedType * Mathf.Pow(1.5F, buildingLevel)).ToString() + ")";
 		}
 		else{
 			NotEnoughFunds();
@@ -119,6 +120,7 @@ public class Building : MonoBehaviour {
 			if(transform.parent.GetComponent<PlanetaryControls>().playerMoney >= (int) hudSlot.GetComponent<HUDSlot>().selectedType){
 				Construct(hudSlot.GetComponent<HUDSlot>().selectedType);
 				buildingLevel ++;
+				hudSlot.GetComponent<HUDSlot>().title.text = "Upgrade " + name + " (&" + Mathf.RoundToInt((float) hudSlot.GetComponent<HUDSlot>().selectedType * Mathf.Pow(1.5F, buildingLevel)).ToString() + ")";
 				buildingLevelTextMesh.text = "Lvl" + buildingLevel.ToString();
 				hudSlot.GetComponent<HUDSlot>().Construct();
 				transform.parent.GetComponent<PlanetaryControls>().playerMoney -= (int) hudSlot.GetComponent<HUDSlot>().selectedType;
@@ -234,6 +236,12 @@ public class Building : MonoBehaviour {
 		buildingCooldown = 0.1F;
 		GameObject newProjectile = (GameObject) Instantiate(laser1, transform.position + (transform.position - transform.parent.position) * 1.3F * (1 + (0.25F * buildingLevel)), Quaternion.LookRotation(transform.up));
 		newProjectile.transform.localScale *= (1 + (0.5F * (buildingLevel - 1)));
+		newProjectile.transform.RotateAround(transform.parent.position, new Vector3(0,0,1), 45);
+		newProjectile = (GameObject) Instantiate(laser1, transform.position + (transform.position - transform.parent.position) * 1.3F * (1 + (0.25F * buildingLevel)), Quaternion.LookRotation(transform.up));
+		newProjectile.transform.localScale *= (1 + (0.5F * (buildingLevel - 1)));
+		newProjectile = (GameObject) Instantiate(laser1, transform.position + (transform.position - transform.parent.position) * 1.3F * (1 + (0.25F * buildingLevel)), Quaternion.LookRotation(transform.up));
+		newProjectile.transform.localScale *= (1 + (0.5F * (buildingLevel - 1)));
+		newProjectile.transform.RotateAround(transform.parent.position, new Vector3(0,0,1), -45);
 	}
 	
 	public void Reset () {

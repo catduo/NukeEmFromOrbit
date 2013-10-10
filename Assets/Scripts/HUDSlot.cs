@@ -8,7 +8,7 @@ public class HUDSlot : MonoBehaviour {
 	public Transform laserBuilding;
 	public Transform factoryBuilding;
 	public Transform repairBuilding;
-	private TextMesh title;
+	public TextMesh title;
 	private int selectedTitle = 0;
 	private Transform[] buildingList;
 	private Transform[] buildingPrefabList;
@@ -22,7 +22,6 @@ public class HUDSlot : MonoBehaviour {
 	void Start () {
 		titles = new string[] {"Cannon", "Rocket", "Laser", "Factory", "Repair"};
 		title = transform.FindChild("Title").GetComponent<TextMesh>();
-		title.text = "Construct " + titles [selectedTitle];
 		buildingPrefabList = new Transform[] {cannonBuilding, rocketBuilding, laserBuilding, factoryBuilding, repairBuilding};
 		buildingList = new Transform[5];
 		buildingTypeList = new BuildingType[] {BuildingType.Cannon, BuildingType.Rocket, BuildingType.Laser, BuildingType.Factory, BuildingType.Repair};
@@ -33,6 +32,7 @@ public class HUDSlot : MonoBehaviour {
 			buildingList[i] = buildingListObject;
 		}
 		selectedType = buildingTypeList[0];
+		title.text = "Construct " + titles [selectedTitle] + " (&" + ((int)selectedType).ToString() + ")";
 		for( int i = 0; i < transform.FindChild("ProgressBar").childCount; i++){
 			transform.FindChild("ProgressBar").GetChild(i).renderer.enabled = false;
 		}
@@ -50,7 +50,6 @@ public class HUDSlot : MonoBehaviour {
 		for( int i = 0; i < transform.FindChild("ProgressBar").childCount; i++){
 			transform.FindChild("ProgressBar").GetChild(i).renderer.enabled = true;
 		}
-		title.text = "Trigger " + titles [selectedTitle];
 	}
 	
 	public void ScrollOnSelect(int direction){
@@ -61,7 +60,6 @@ public class HUDSlot : MonoBehaviour {
 		else if(selectedTitle < 0){
 			selectedTitle = 4;
 		}
-		title.text = "Construct " + titles [selectedTitle];
 		if(direction > 0){
 			buildingList = new Transform[] {buildingList[1], buildingList[2], buildingList[3], buildingList[4], buildingList[0]};
 			buildingTypeList = new BuildingType[] {buildingTypeList[1], buildingTypeList[2], buildingTypeList[3], buildingTypeList[4], buildingTypeList[0]};
@@ -75,6 +73,7 @@ public class HUDSlot : MonoBehaviour {
 			buildingList[i].localScale = new Vector3(1 / Mathf.Sqrt(i + 1)/ transform.lossyScale.x, 1 / Mathf.Sqrt(i + 1)/transform.lossyScale.y, 1 / Mathf.Sqrt(i + 1)/transform.lossyScale.z);
 		}
 		selectedType = buildingTypeList[0];
+		title.text = "Construct " + titles [selectedTitle] + " (&" + (((int)selectedType).ToString()) + ")";
 	}
 	
 	public void Reset(){
@@ -86,7 +85,6 @@ public class HUDSlot : MonoBehaviour {
 		titles = new string[] {"Cannon", "Rocket", "Laser", "Factory", "Repair"};
 		selectedTitle = 0;
 		title = transform.FindChild("Title").GetComponent<TextMesh>();
-		title.text = "Construct " + titles [selectedTitle];
 		buildingList = new Transform[5];
 		buildingTypeList = new BuildingType[] {BuildingType.Cannon, BuildingType.Rocket, BuildingType.Laser, BuildingType.Factory, BuildingType.Repair};
 		for(int i = 0; i < buildingPrefabList.Length; i++){
@@ -96,6 +94,7 @@ public class HUDSlot : MonoBehaviour {
 			buildingList[i] = buildingListObject;
 		}
 		selectedType = buildingTypeList[0];
+		title.text = "Construct " + titles [selectedTitle] + " (&" + (((int)selectedType).ToString()) + ")";
 		for( int i = 0; i < transform.FindChild("ProgressBar").childCount; i++){
 			transform.FindChild("ProgressBar").GetChild(i).renderer.enabled = false;
 		}
