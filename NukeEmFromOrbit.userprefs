@@ -1,14 +1,15 @@
 ﻿<Properties>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/Projectile.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/NetworkManager.cs">
     <Files>
-      <File FileName="Assets/Scripts/Building.cs" Line="244" Column="89" />
-      <File FileName="Assets/Scripts/Projectile.cs" Line="39" Column="63" />
-      <File FileName="Assets/Scripts/PlanetaryControls.cs" Line="92" Column="26" />
-      <File FileName="Assets/Scripts/NetworkManager.cs" Line="45" Column="27" />
-      <File FileName="Assets/Scripts/GUI/Dialog.cs" Line="35" Column="63" />
-      <File FileName="Assets/Scripts/HUDSlot.cs" Line="76" Column="103" />
-      <File FileName="Assets/Scripts/GUI/ProgressBar.cs" Line="21" Column="4" />
+      <File FileName="Assets/Scripts/Building.cs" Line="1" Column="1" />
+      <File FileName="Assets/Scripts/Projectile.cs" Line="1" Column="1" />
+      <File FileName="Assets/Scripts/PlanetaryControls.cs" Line="1" Column="1" />
+      <File FileName="Assets/Scripts/NetworkManager.cs" Line="89" Column="70" />
+      <File FileName="Assets/Scripts/GUI/Dialog.cs" Line="1" Column="1" />
+      <File FileName="Assets/Scripts/HUDSlot.cs" Line="1" Column="1" />
+      <File FileName="Assets/Scripts/GUI/ProgressBar.cs" Line="23" Column="114" />
+      <File FileName="Assets/Scripts/GUI/Instructions.cs" Line="17" Column="73" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>

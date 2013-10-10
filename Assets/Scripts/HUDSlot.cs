@@ -17,6 +17,7 @@ public class HUDSlot : MonoBehaviour {
 	private bool is_built;
 	private bool is_selected;
 	public BuildingType selectedType;
+	public int cost;
 	
 	// Use this for initialization
 	void Start () {

@@ -14,7 +14,7 @@ public class PlanetaryControls: MonoBehaviour {
 	private Transform down;
 	private Transform left;
 	private Transform right;
-	private Transform selected;
+	public Transform selected;
 	
 	public Transform statusArea;
 	
@@ -228,6 +228,7 @@ public class PlanetaryControls: MonoBehaviour {
 	}
 	
 	public void Reset () {
+		transform.rotation = Quaternion.identity;
 		planetaryHealth = 100;
 		healthBar.GetComponent<ProgressBar>().measureCap = planetaryHealth;
 		healthBar.GetComponent<ProgressBar>().measure = planetaryHealth;

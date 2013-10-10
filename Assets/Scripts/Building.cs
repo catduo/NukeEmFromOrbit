@@ -37,6 +37,7 @@ public class Building : MonoBehaviour {
 	private Vector3 fireDirection;
 	private BuildingType thisType = BuildingType.Empty;
 	private float buildingLevel = 0;
+	public int cost ;
 	
 	private float buildingCooldown = 0.1F;
 	public float lastBuildingUse;
@@ -57,6 +58,7 @@ public class Building : MonoBehaviour {
 		if(name == "Up"){
 			Selected();
 		}
+		cost = 15;
 	}
 	
 	// Update is called once per frame
@@ -95,6 +97,7 @@ public class Building : MonoBehaviour {
 		if(thisType == BuildingType.Empty){
 			hudSlot.GetComponent<HUDSlot>().ScrollOnSelect(direction);
 		}
+		cost = hudSlot.GetComponent<HUDSlot>().cost;
 	}
 	
 	public void Upgrade() {
@@ -104,7 +107,8 @@ public class Building : MonoBehaviour {
 			transform.parent.GetComponent<PlanetaryControls>().moneyText.text = "&" + transform.parent.GetComponent<PlanetaryControls>().playerMoney.ToString();
 			buildingLevel ++;
 			buildingLevelTextMesh.text = "Lvl" + buildingLevel.ToString();
-			hudSlot.GetComponent<HUDSlot>().title.text = "Upgrade " + name + " (&" + Mathf.RoundToInt((float) hudSlot.GetComponent<HUDSlot>().selectedType * Mathf.Pow(1.5F, buildingLevel)).ToString() + ")";
+			cost = Mathf.RoundToInt((float) hudSlot.GetComponent<HUDSlot>().selectedType * Mathf.Pow(1.5F, buildingLevel));
+			hudSlot.GetComponent<HUDSlot>().title.text = "Upgrade " + name + " (&" + cost.ToString() + ")";
 		}
 		else{
 			NotEnoughFunds();
@@ -120,7 +124,8 @@ public class Building : MonoBehaviour {
 			if(transform.parent.GetComponent<PlanetaryControls>().playerMoney >= (int) hudSlot.GetComponent<HUDSlot>().selectedType){
 				Construct(hudSlot.GetComponent<HUDSlot>().selectedType);
 				buildingLevel ++;
-				hudSlot.GetComponent<HUDSlot>().title.text = "Upgrade " + name + " (&" + Mathf.RoundToInt((float) hudSlot.GetComponent<HUDSlot>().selectedType * Mathf.Pow(1.5F, buildingLevel)).ToString() + ")";
+				cost = Mathf.RoundToInt((float) hudSlot.GetComponent<HUDSlot>().selectedType * Mathf.Pow(1.5F, buildingLevel));
+				hudSlot.GetComponent<HUDSlot>().title.text = "Upgrade " + name + " (&" + cost.ToString() + ")";
 				buildingLevelTextMesh.text = "Lvl" + buildingLevel.ToString();
 				hudSlot.GetComponent<HUDSlot>().Construct();
 				transform.parent.GetComponent<PlanetaryControls>().playerMoney -= (int) hudSlot.GetComponent<HUDSlot>().selectedType;
