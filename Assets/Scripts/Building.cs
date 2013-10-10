@@ -44,6 +44,10 @@ public class Building : MonoBehaviour {
 	public bool is_buildingReady = true;
 	private Transform progressBar;
 	
+	private bool is_actionDelayed = false;
+	private float delayTime = 0;
+	private float delayDuration = 0;
+	
 	// Use this for initialization
 	void Start () {
 		hudSlot = transform.parent.GetComponent<PlanetaryControls>().statusArea.FindChild("Locations").FindChild(name);
@@ -69,6 +73,10 @@ public class Building : MonoBehaviour {
 	}
 	
 	public void BuildingReady () {
+		if(is_actionDelayed && delayTime + delayDuration < Time.time){
+			Action ();
+			is_actionDelayed = false;
+		}
 		if(buildingCooldown + lastBuildingUse < Time.time){
 			is_buildingReady = true;
 			progressBar.GetComponent<ProgressBar>().measure = buildingCooldown;
@@ -174,6 +182,14 @@ public class Building : MonoBehaviour {
 		}
 	}
 	
+	public void DelayAction(float thisDelay) {
+		if(!is_actionDelayed){
+			is_actionDelayed = true;
+			delayDuration = thisDelay;
+			delayTime = Time.time;
+		}
+	}
+	
 	public void Action() { 
 		if(is_buildingReady){
 			progressBar.GetComponent<ProgressBar>().measure = 1;
@@ -215,7 +231,7 @@ public class Building : MonoBehaviour {
 	}
 	
 	void FireRocket () {
-		buildingCooldown = 1;
+		buildingCooldown = 2;
 		GameObject newProjectile = (GameObject) Instantiate(rocket1, transform.position + (transform.position - transform.parent.position) * 1.3F * (1 + (0.1F * buildingLevel)), Quaternion.LookRotation(transform.up));
 		newProjectile.transform.localScale *= (1 + (0.5F * (buildingLevel - 1)));
 	}

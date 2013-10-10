@@ -191,39 +191,43 @@ public class PlanetaryControls: MonoBehaviour {
 	}
 	
 	[RPC] void BulletCollision (float damage){
-		planetaryHealth -= damage;
-		healthBar.GetComponent<ProgressBar>().measure = planetaryHealth;
-		if(planetaryHealth < 1){
-			GameState.gameOver = true;
-			NetworkManager.is_gameOver = true;
-			AI.is_ai = false;
-			if(is_remote){
-				NetworkManager.winningPlayerText = "You Won!";
-			}
-			else{
-				NetworkManager.winningPlayerText = "You Lost!";
+		if(!NetworkManager.is_gameOver){
+			planetaryHealth -= damage;
+			healthBar.GetComponent<ProgressBar>().measure = planetaryHealth;
+			if(planetaryHealth < 1){
+				GameState.gameOver = true;
+				NetworkManager.is_gameOver = true;
+				AI.is_ai = false;
+				if(is_remote){
+					NetworkManager.winningPlayerText = "You Won!";
+				}
+				else{
+					NetworkManager.winningPlayerText = "You Lost!";
+				}
 			}
 		}
 	}
 	
 	[RPC] void BulletCollision (Collision collision) {
-		planetaryHealth -= collision.transform.GetComponent<Projectile>().damage;
-		healthBar.GetComponent<ProgressBar>().measure = planetaryHealth;
-		if(planetaryHealth < 1){
-			GameState.gameOver = true;
-			NetworkManager.is_gameOver = true;
-			NewGame.is_gameStarted = false;
-			AI.is_ai = false;
-			if(is_remote){
-				NetworkManager.winningPlayerText = "You Won!";
+		if(!NetworkManager.is_gameOver){
+			planetaryHealth -= collision.transform.GetComponent<Projectile>().damage;
+			healthBar.GetComponent<ProgressBar>().measure = planetaryHealth;
+			if(planetaryHealth < 1){
+				GameState.gameOver = true;
+				NetworkManager.is_gameOver = true;
+				NewGame.is_gameStarted = false;
+				AI.is_ai = false;
+				if(is_remote){
+					NetworkManager.winningPlayerText = "You Won!";
+				}
+				else{
+					NetworkManager.winningPlayerText = "You Lost!";
+				}
+				GameObject.Find ("MainCamera").GetComponent<NetworkManager>().Disconnect();
 			}
-			else{
-				NetworkManager.winningPlayerText = "You Lost!";
+			if((player == 1 && !is_remote) || (player == 2 && is_remote)){
+				networkView.RPC("BulletCollision", RPCMode.Others, collision.transform.GetComponent<Projectile>().damage);
 			}
-			GameObject.Find ("MainCamera").GetComponent<NetworkManager>().Disconnect();
-		}
-		if((player == 1 && !is_remote) || (player == 2 && is_remote)){
-			networkView.RPC("BulletCollision", RPCMode.Others, collision.transform.GetComponent<Projectile>().damage);
 		}
 	}
 	

@@ -76,11 +76,12 @@ public class NetworkManager : MonoBehaviour {
 				is_gameOver = false;
 				is_online = false;
 				is_local = false;
+				is_menu = true;
 			}
 		}
 		else{
 			if(is_instructions){
-		        if (GUI.Button(new Rect(300, 560, 200, 40), "")){
+		        if (GUI.Button(new Rect(300, 560, 250, 40), "")){
 					GameObject.Find ("MainCamera").transform.position = new Vector3 (0,0,-20);
 					is_instructions = false;
 					is_menu = true;

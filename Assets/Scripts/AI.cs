@@ -18,6 +18,7 @@ public class AI : MonoBehaviour {
 	private int[] costs = new int[4];
 	public int difficulty = 1;
 	static public bool is_ai;
+	private float aiDelay;
 	
 	// Use this for initialization
 	public void Setup () {
@@ -33,6 +34,7 @@ public class AI : MonoBehaviour {
 		GetCosts();
 		is_ai = true;
 		aiPlanet.GetComponent<PlanetaryControls>().Remote("client");
+		aiDelay = 3 - difficulty/5;
 	}
 	
 	// Update is called once per frame
@@ -48,7 +50,7 @@ public class AI : MonoBehaviour {
 						GetCosts();
 					}
 					if(planetaryPositions[i].GetComponent<Building>().is_buildingReady){
-						planetaryPositions[i].GetComponent<Building>().Action();
+						planetaryPositions[i].GetComponent<Building>().DelayAction(aiDelay);
 					}
 				}
 			}
