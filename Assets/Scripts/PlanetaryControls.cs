@@ -71,6 +71,12 @@ public class PlanetaryControls: MonoBehaviour {
 		if(remoteValue == "client"){
 			is_client = true;
 		}
+	}	
+	public void NotRemote(string remoteValue){
+		is_remote = false;
+		if(remoteValue == "client"){
+			is_client = true;
+		}
 	}
 	
 	void Income(){

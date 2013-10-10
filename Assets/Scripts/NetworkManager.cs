@@ -24,12 +24,14 @@ public class NetworkManager : MonoBehaviour {
 	void OnServerInitialized(){
 	    Debug.Log("Server Initializied");
 		player2Planet.GetComponent<PlanetaryControls>().Remote("server");
+		player1Planet.GetComponent<PlanetaryControls>().NotRemote("server");
 	}
 	
 	public void Disconnect () {
 		Network.Disconnect();
 		is_online = false;
 		connectionAttempts = 0;
+		NewGame.readyCount = 0;
 	}
 	
 	// Use this for initialization
@@ -40,6 +42,7 @@ public class NetworkManager : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		if(is_online && Network.connections.Length == 0){
+			NewGame.readyCount = 0;
 			if(waitTime + lastTry < Time.time){
 				if(connectionAttempts > 8){
 					Disconnect();
@@ -74,7 +77,7 @@ public class NetworkManager : MonoBehaviour {
 		            is_online = true;
 					is_looking = true;
 				}
-		        if (GUI.Button(new Rect(100, 250, 250, 100), "Play Local")){
+		        if (GUI.Button(new Rect(100, 250, 250, 100), "Tutorial")){
 					is_local = true;
 				}
 			}
@@ -89,7 +92,7 @@ public class NetworkManager : MonoBehaviour {
 				GameObject.Find ("Player1Planet").GetComponent<PlanetaryControls>().Ready();
 			}
 		}
-		else if (NewGame.readyCount == 1 && !is_looking && is_online){
+		else if (NewGame.readyCount == 2 && !is_looking && is_online){
 			GUI.Box(new Rect(100,100,250,100), "Waiting for other Players...");
 		}
 	}
@@ -110,5 +113,6 @@ public class NetworkManager : MonoBehaviour {
 	void OnConnectedToServer(){
 	    Debug.Log("Server Joined");
 		player1Planet.GetComponent<PlanetaryControls>().Remote("client");
+		player2Planet.GetComponent<PlanetaryControls>().NotRemote("client");
 	}
 }

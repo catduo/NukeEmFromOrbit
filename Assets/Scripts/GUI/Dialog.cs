@@ -25,7 +25,6 @@ public class Dialog : MonoBehaviour {
 		if(text != ""){
 			transform.FindChild("Text").GetComponent<TextMesh>().text = text;
 		}
-		Time.timeScale = 0;
 		if(transform.position.x != mainCamera.transform.position.x){
 			transform.position = new Vector3(mainCamera.transform.position.x, mainCamera.transform.position.y, mainCamera.transform.position.z + 3);
 		}
@@ -34,7 +33,6 @@ public class Dialog : MonoBehaviour {
 	public void CloseDialog(){
 		open = false;
 		if(transform.position.x == mainCamera.transform.position.x){
-			Time.timeScale = 1;
 			transform.position = new Vector3(mainCamera.transform.position.x + 1000, mainCamera.transform.position.y + 1000, mainCamera.transform.position.z - 20);
 		}
 	}

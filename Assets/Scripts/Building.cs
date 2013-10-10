@@ -98,7 +98,7 @@ public class Building : MonoBehaviour {
 	}
 	
 	public void Upgrade() {
-		if(transform.parent.GetComponent<PlanetaryControls>().playerMoney > Mathf.RoundToInt((float) hudSlot.GetComponent<HUDSlot>().selectedType * Mathf.Pow(1.5F, buildingLevel))){
+		if(transform.parent.GetComponent<PlanetaryControls>().playerMoney >= Mathf.RoundToInt((float) hudSlot.GetComponent<HUDSlot>().selectedType * Mathf.Pow(1.5F, buildingLevel))){
 			Construct(hudSlot.GetComponent<HUDSlot>().selectedType);
 			transform.parent.GetComponent<PlanetaryControls>().playerMoney -= Mathf.RoundToInt((float) hudSlot.GetComponent<HUDSlot>().selectedType * Mathf.Pow(1.5F, buildingLevel));
 			transform.parent.GetComponent<PlanetaryControls>().moneyText.text = "&" + transform.parent.GetComponent<PlanetaryControls>().playerMoney.ToString();
@@ -116,7 +116,7 @@ public class Building : MonoBehaviour {
 	
 	public void Construct() {
 		if(thisType == BuildingType.Empty){
-			if(transform.parent.GetComponent<PlanetaryControls>().playerMoney > (int) hudSlot.GetComponent<HUDSlot>().selectedType){
+			if(transform.parent.GetComponent<PlanetaryControls>().playerMoney >= (int) hudSlot.GetComponent<HUDSlot>().selectedType){
 				Construct(hudSlot.GetComponent<HUDSlot>().selectedType);
 				buildingLevel ++;
 				buildingLevelTextMesh.text = "Lvl" + buildingLevel.ToString();
