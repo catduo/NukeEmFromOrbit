@@ -16,7 +16,8 @@ public class AI : MonoBehaviour {
 	private int aiComputeLag = 0;
 	private int money;
 	private int[] costs = new int[4];
-	private int difficulty = 1;
+	public int difficulty = 1;
+	static public bool is_ai;
 	
 	// Use this for initialization
 	public void Setup () {
@@ -30,12 +31,13 @@ public class AI : MonoBehaviour {
 		selected = up;
 		SetBuildings();
 		GetCosts();
-		difficulty++;
+		is_ai = true;
+		aiPlanet.GetComponent<PlanetaryControls>().Remote("client");
 	}
 	
 	// Update is called once per frame
 	void Update () {
-		if(NetworkManager.is_local){
+		if(is_ai){
 			if(aiComputeLag >= 5){
 				aiComputeLag = 0;
 				Debug.Log ("AI computing");
@@ -81,8 +83,56 @@ public class AI : MonoBehaviour {
 			break;
 		case 1:
 			Scroll(left, 1);
-			Scroll(down, 2);
+			Scroll(down, 1);
+			Scroll(right, 1);
+			Scroll(up, 1);
+			break;
+		case 2:
+			Scroll(left, 1);
+			Scroll(down, 0);
+			Scroll(right, 1);
+			Scroll(up, 0);
+			break;
+		case 3:
+			Scroll(left, 3);
+			Scroll(down, 3);
+			Scroll(right, 0);
+			Scroll(up, 3);
+			break;
+		case 4:
+			Scroll(left, 3);
+			Scroll(down, 1);
 			Scroll(right, 3);
+			Scroll(up, 0);
+			break;
+		case 5:
+			Scroll(left, 4);
+			Scroll(down, 1);
+			Scroll(right, 1);
+			Scroll(up, 1);
+			break;
+		case 6:
+			Scroll(left, 4);
+			Scroll(down, 1);
+			Scroll(right, 1);
+			Scroll(up, 3);
+			break;
+		case 7:
+			Scroll(left, 4);
+			Scroll(down, 0);
+			Scroll(right, 0);
+			Scroll(up, 3);
+			break;
+		case 8:
+			Scroll(left, 1);
+			Scroll(down, 3);
+			Scroll(right, 0);
+			Scroll(up, 4);
+			break;
+		case 9:
+			Scroll(left, 0);
+			Scroll(down, 3);
+			Scroll(right, 2);
 			Scroll(up, 4);
 			break;
 		default:

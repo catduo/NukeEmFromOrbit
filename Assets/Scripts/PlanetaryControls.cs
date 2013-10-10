@@ -195,7 +195,14 @@ public class PlanetaryControls: MonoBehaviour {
 		healthBar.GetComponent<ProgressBar>().measure = planetaryHealth;
 		if(planetaryHealth < 1){
 			GameState.gameOver = true;
-			GameObject.Find ("GameOverMenu").GetComponent<Dialog>().OpenDialog("the winner is Player " + otherPlayer + "!");
+			NetworkManager.is_gameOver = true;
+			AI.is_ai = false;
+			if(is_remote){
+				NetworkManager.winningPlayerText = "You Won!";
+			}
+			else{
+				NetworkManager.winningPlayerText = "You Lost!";
+			}
 		}
 	}
 	
@@ -204,8 +211,15 @@ public class PlanetaryControls: MonoBehaviour {
 		healthBar.GetComponent<ProgressBar>().measure = planetaryHealth;
 		if(planetaryHealth < 1){
 			GameState.gameOver = true;
-			GameObject.Find ("GameOverMenu").GetComponent<Dialog>().OpenDialog("the winner is Player " + otherPlayer + "!");
+			NetworkManager.is_gameOver = true;
 			NewGame.is_gameStarted = false;
+			AI.is_ai = false;
+			if(is_remote){
+				NetworkManager.winningPlayerText = "You Won!";
+			}
+			else{
+				NetworkManager.winningPlayerText = "You Lost!";
+			}
 			GameObject.Find ("MainCamera").GetComponent<NetworkManager>().Disconnect();
 		}
 		if((player == 1 && !is_remote) || (player == 2 && is_remote)){

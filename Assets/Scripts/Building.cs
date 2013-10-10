@@ -228,13 +228,12 @@ public class Building : MonoBehaviour {
 	
 	void RepairPlanet () {
 		if(transform.parent.GetComponent<PlanetaryControls>().planetaryHealth < (100 - (5 + 2 * buildingLevel))){
-			buildingCooldown = 10;
 			transform.parent.GetComponent<PlanetaryControls>().planetaryHealth += (5 + 2 * buildingLevel);
 		}
 		else if(transform.parent.GetComponent<PlanetaryControls>().planetaryHealth < 100){
-			buildingCooldown = 10;
 			transform.parent.GetComponent<PlanetaryControls>().planetaryHealth = 100;
 		}
+		buildingCooldown = 10;
 	}
 	
 	void FireLaser () {
