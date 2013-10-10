@@ -34,7 +34,7 @@ public class AI : MonoBehaviour {
 		GetCosts();
 		is_ai = true;
 		aiPlanet.GetComponent<PlanetaryControls>().Remote("client");
-		aiDelay = 0.3F - difficulty/30;
+		aiDelay = 0.18F - difficulty / 5;
 	}
 	
 	// Update is called once per frame

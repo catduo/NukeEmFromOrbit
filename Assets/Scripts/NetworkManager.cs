@@ -9,7 +9,7 @@ public class NetworkManager : MonoBehaviour {
 	public Transform player2Planet;
 	private float waitTime = 0.5F;
 	private float lastTry;
-	public bool is_online = false;
+	static public bool is_online = false;
 	static public bool is_local = false;
 	private bool is_tryHosting = false;
 	private bool is_looking = false;

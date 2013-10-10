@@ -191,10 +191,10 @@ public class PlanetaryControls: MonoBehaviour {
 	}
 	
 	[RPC] void BulletCollision (float damage){
-		if(!NetworkManager.is_local || !NetworkManager.is_local){
+		if(NetworkManager.is_local || NetworkManager.is_online || AI.is_ai){
 			planetaryHealth -= damage;
 			healthBar.GetComponent<ProgressBar>().measure = planetaryHealth;
-			if(planetaryHealth < 1){
+			if(planetaryHealth < 1 && !NetworkManager.is_gameOver){
 				GameState.gameOver = true;
 				NetworkManager.is_gameOver = true;
 				AI.is_ai = false;
@@ -209,10 +209,10 @@ public class PlanetaryControls: MonoBehaviour {
 	}
 	
 	[RPC] void BulletCollision (Collision collision) {
-		if(!NetworkManager.is_local || !NetworkManager.is_local){
+		if(NetworkManager.is_local || NetworkManager.is_online || AI.is_ai){
 			planetaryHealth -= collision.transform.GetComponent<Projectile>().damage;
 			healthBar.GetComponent<ProgressBar>().measure = planetaryHealth;
-			if(planetaryHealth < 1){
+			if(planetaryHealth < 1 && !NetworkManager.is_gameOver){
 				GameState.gameOver = true;
 				NetworkManager.is_gameOver = true;
 				NewGame.is_gameStarted = false;
