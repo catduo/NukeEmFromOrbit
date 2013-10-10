@@ -85,6 +85,7 @@ public class NetworkManager : MonoBehaviour {
 		if(!is_ready && !is_looking && is_online){
 			if (GUI.Button(new Rect(100, 250, 250, 100), "Ready!")){
 				is_ready = true;
+				NewGame.readyCount++;
 				GameObject.Find ("Player1Planet").GetComponent<PlanetaryControls>().Ready();
 			}
 		}

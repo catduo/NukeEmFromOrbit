@@ -208,13 +208,16 @@ public class PlanetaryControls: MonoBehaviour {
 	}
 	
 	[RPC] public void Ready () {
-		NewGame.readyCount++;
 		if(NewGame.readyCount == 1){
 			networkView.RPC("Ready", RPCMode.Others);
+			NewGame.readyCount++;
 		}
-		else{
+		else if (NewGame.readyCount == 2){
 			networkView.RPC("Ready", RPCMode.Others);
 			GameObject.Find ("NewGame").GetComponent<NewGame>().Tap();
+		}
+		else{
+			NewGame.readyCount = 0;
 		}
 	}
 	
