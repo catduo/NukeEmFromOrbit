@@ -90,7 +90,6 @@ public class Building : MonoBehaviour {
 			progressBar.GetComponent<ProgressBar>().measure = buildingCooldown;
 		}
 		else{
-			Debug.Log (Time.time - lastBuildingUse);
 			progressBar.GetComponent<ProgressBar>().measure = Time.time - lastBuildingUse;
 		}
 	}
@@ -119,14 +118,14 @@ public class Building : MonoBehaviour {
 	public void Upgrade() {
 		if(transform.parent.GetComponent<PlanetaryControls>().playerMoney >= Mathf.RoundToInt((float) hudSlot.GetComponent<HUDSlot>().selectedType * Mathf.Pow(1.5F, buildingLevel))){
 			Construct(hudSlot.GetComponent<HUDSlot>().selectedType);
-			audioSource.clip = construction;
-			audioSource.Play ();
 			transform.parent.GetComponent<PlanetaryControls>().playerMoney -= Mathf.RoundToInt((float) hudSlot.GetComponent<HUDSlot>().selectedType * Mathf.Pow(1.5F, buildingLevel));
 			transform.parent.GetComponent<PlanetaryControls>().moneyText.text = "&" + transform.parent.GetComponent<PlanetaryControls>().playerMoney.ToString();
 			buildingLevel ++;
 			buildingLevelTextMesh.text = "Lvl" + buildingLevel.ToString();
 			cost = Mathf.RoundToInt((float) hudSlot.GetComponent<HUDSlot>().selectedType * Mathf.Pow(1.5F, buildingLevel));
 			hudSlot.GetComponent<HUDSlot>().title.text = "Upgrade " + name + " (&" + cost.ToString() + ")";
+			audioSource.clip = construction;
+			audioSource.Play ();
 		}
 		else{
 			NotEnoughFunds();
@@ -134,9 +133,11 @@ public class Building : MonoBehaviour {
 	}
 	
 	void NotEnoughFunds () {
-		audioSource.clip = notEnoughFunds;
-		audioSource.Play ();
-		Debug.Log ("not enough funds");
+		if(!transform.parent.GetComponent<PlanetaryControls>().is_remote){
+			audioSource.clip = notEnoughFunds;
+			audioSource.Play ();
+			Debug.Log ("not enough funds");
+		}
 	}
 	
 	public void Construct() {
@@ -144,14 +145,14 @@ public class Building : MonoBehaviour {
 			if(transform.parent.GetComponent<PlanetaryControls>().playerMoney >= (int) hudSlot.GetComponent<HUDSlot>().selectedType){
 				Construct(hudSlot.GetComponent<HUDSlot>().selectedType);
 				buildingLevel ++;
-				audioSource.clip = construction;
-				audioSource.Play ();
 				cost = Mathf.RoundToInt((float) hudSlot.GetComponent<HUDSlot>().selectedType * Mathf.Pow(1.5F, buildingLevel));
 				hudSlot.GetComponent<HUDSlot>().title.text = "Upgrade " + name + " (&" + cost.ToString() + ")";
 				buildingLevelTextMesh.text = "Lvl" + buildingLevel.ToString();
 				hudSlot.GetComponent<HUDSlot>().Construct();
 				transform.parent.GetComponent<PlanetaryControls>().playerMoney -= (int) hudSlot.GetComponent<HUDSlot>().selectedType;
 				transform.parent.GetComponent<PlanetaryControls>().moneyText.text = "&" + transform.parent.GetComponent<PlanetaryControls>().playerMoney.ToString();
+				audioSource.clip = construction;
+				audioSource.Play ();
 			}
 			else{
 				NotEnoughFunds();
@@ -239,32 +240,30 @@ public class Building : MonoBehaviour {
 	}
 		
 	void FireCannon () {
-		audioSource.clip = cannonFire;
-		audioSource.Play ();
 		buildingCooldown = 0.3F;	
 		GameObject newProjectile = (GameObject) Instantiate(cannon1, transform.position + (transform.position - transform.parent.position) * 1.3F * (1 + (0.1F * buildingLevel)), Quaternion.LookRotation(transform.up));
 		newProjectile.transform.localScale *= (1 + (0.5F * (buildingLevel - 1)));
+		audioSource.clip = cannonFire;
+		audioSource.Play ();
 	}
 	
 	void FireRocket () {
-		audioSource.clip = rocketFire;
-		audioSource.Play ();
 		buildingCooldown = 2;
 		GameObject newProjectile = (GameObject) Instantiate(rocket1, transform.position + (transform.position - transform.parent.position) * 1.3F * (1 + (0.1F * buildingLevel)), Quaternion.LookRotation(transform.up));
 		newProjectile.transform.localScale *= (1 + (0.5F * (buildingLevel - 1)));
+		audioSource.clip = rocketFire;
+		audioSource.Play ();
 	}
 	
 	void CollectFactory () {
-		audioSource.clip = factoryActivate;
-		audioSource.Play ();
 		buildingCooldown = 5;
 		transform.parent.GetComponent<PlanetaryControls>().playerMoney += 5 * (int) buildingLevel;
 		transform.parent.GetComponent<PlanetaryControls>().moneyText.text = "&" + transform.parent.GetComponent<PlanetaryControls>().playerMoney.ToString();
+		audioSource.clip = factoryActivate;
+		audioSource.Play ();
 	}
 	
 	void RepairPlanet () {
-		audioSource.clip = repairActivate;
-		audioSource.Play ();
 		if(transform.parent.GetComponent<PlanetaryControls>().planetaryHealth < (100 - (5 + 2 * buildingLevel))){
 			transform.parent.GetComponent<PlanetaryControls>().planetaryHealth += (5 + 2 * buildingLevel);
 		}
@@ -272,11 +271,11 @@ public class Building : MonoBehaviour {
 			transform.parent.GetComponent<PlanetaryControls>().planetaryHealth = 100;
 		}
 		buildingCooldown = 10;
+		audioSource.clip = repairActivate;
+		audioSource.Play ();
 	}
 	
 	void FireLaser () {
-		audioSource.clip = laserFire;
-		audioSource.Play ();
 		buildingCooldown = 0.1F;
 		GameObject newProjectile = (GameObject) Instantiate(laser1, transform.position + (transform.position - transform.parent.position) * 1.3F * (1 + (0.25F * buildingLevel)), Quaternion.LookRotation(transform.up));
 		newProjectile.transform.localScale *= (1 + (0.5F * (buildingLevel - 1)));
@@ -286,6 +285,8 @@ public class Building : MonoBehaviour {
 		newProjectile = (GameObject) Instantiate(laser1, transform.position + (transform.position - transform.parent.position) * 1.3F * (1 + (0.25F * buildingLevel)), Quaternion.LookRotation(transform.up));
 		newProjectile.transform.localScale *= (1 + (0.5F * (buildingLevel - 1)));
 		newProjectile.transform.RotateAround(transform.parent.position, new Vector3(0,0,1), -45);
+		audioSource.clip = laserFire;
+		audioSource.Play ();
 	}
 	
 	public void Reset () {

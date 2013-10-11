@@ -30,7 +30,7 @@ public class PlanetaryControls: MonoBehaviour {
 	public int player;
 	public int otherPlayer;
 	private Vector3 startPosition;
-	private bool is_remote = false;
+	public bool is_remote = false;
 	private bool is_client = false;
 	private bool is_gameStarted = false;
 	
@@ -195,6 +195,9 @@ public class PlanetaryControls: MonoBehaviour {
 			planetaryHealth -= damage;
 			healthBar.GetComponent<ProgressBar>().measure = planetaryHealth;
 			if(planetaryHealth < 1 && !NetworkManager.is_gameOver){
+				GetComponent<AudioSource>().Play();
+				particleSystem.Play();
+				transform.FindChild("PlanetArt").renderer.enabled = false;
 				GameState.gameOver = true;
 				NetworkManager.is_gameOver = true;
 				AI.is_ai = false;
@@ -213,6 +216,9 @@ public class PlanetaryControls: MonoBehaviour {
 			planetaryHealth -= collision.transform.GetComponent<Projectile>().damage;
 			healthBar.GetComponent<ProgressBar>().measure = planetaryHealth;
 			if(planetaryHealth < 1 && !NetworkManager.is_gameOver){
+				transform.FindChild("PlanetArt").renderer.enabled = false;
+				particleSystem.Play();
+				GetComponent<AudioSource>().Play();
 				GameState.gameOver = true;
 				NetworkManager.is_gameOver = true;
 				NewGame.is_gameStarted = false;
@@ -246,6 +252,7 @@ public class PlanetaryControls: MonoBehaviour {
 	}
 	
 	public void Reset () {
+		transform.FindChild("PlanetArt").renderer.enabled = true;
 		transform.rotation = Quaternion.identity;
 		planetaryHealth = 100;
 		healthBar.GetComponent<ProgressBar>().measureCap = planetaryHealth;
