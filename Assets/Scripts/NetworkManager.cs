@@ -66,6 +66,9 @@ public class NetworkManager : MonoBehaviour {
 		}
 		else if (Network.connections.Length == 1){
 			is_looking = false;
+			if(!is_ready){
+				is_menu = true;
+			}
 		}
 	}
 	
@@ -140,7 +143,6 @@ public class NetworkManager : MonoBehaviour {
 						is_instructions = true;
 					}
 			        if (GUI.Button(new Rect(350, 400, 150, 50), "Credits")){
-						GameObject.Find ("MainCamera").transform.position = new Vector3 (0,15,-20);
 						is_credits = true;
 					}
 				}
@@ -257,5 +259,6 @@ public class NetworkManager : MonoBehaviour {
 	    Debug.Log("Server Joined");
 		player1Planet.GetComponent<PlanetaryControls>().Remote("client");
 		player2Planet.GetComponent<PlanetaryControls>().NotRemote("client");
+		is_menu = true;
 	}
 }
