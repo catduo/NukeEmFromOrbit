@@ -18,6 +18,8 @@ public class HUDSlot : MonoBehaviour {
 	private bool is_selected;
 	public BuildingType selectedType;
 	public int cost;
+	public Material unbuilt;
+	public Material built;
 	
 	// Use this for initialization
 	void Start () {
@@ -51,6 +53,7 @@ public class HUDSlot : MonoBehaviour {
 		for( int i = 0; i < transform.FindChild("ProgressBar").childCount; i++){
 			transform.FindChild("ProgressBar").GetChild(i).renderer.enabled = true;
 		}
+		renderer.material = built;
 	}
 	
 	public void ScrollOnSelect(int direction){
@@ -99,5 +102,6 @@ public class HUDSlot : MonoBehaviour {
 		for( int i = 0; i < transform.FindChild("ProgressBar").childCount; i++){
 			transform.FindChild("ProgressBar").GetChild(i).renderer.enabled = false;
 		}
+		renderer.material = unbuilt;
 	}
 }

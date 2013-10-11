@@ -5,6 +5,7 @@ public class PlanetaryControls: MonoBehaviour {
 	
 	public string action;
 	public string upgradeConstruct;
+	public string upgradeConstruct2;
 	public string scrollLeft;
 	public string scrollRight;
 	public string switchClock;
@@ -97,6 +98,9 @@ public class PlanetaryControls: MonoBehaviour {
 			GetAction ();
 		}
 		if(Input.GetKeyDown(upgradeConstruct)){
+			GetUpgradeConstruct ();
+		}
+		if(Input.GetKeyDown(upgradeConstruct2)){
 			GetUpgradeConstruct ();
 		}
 		if(Input.GetKeyDown(scrollLeft)){
@@ -197,7 +201,12 @@ public class PlanetaryControls: MonoBehaviour {
 			if(planetaryHealth < 1 && !NetworkManager.is_gameOver){
 				GetComponent<AudioSource>().Play();
 				particleSystem.Play();
-				transform.FindChild("PlanetArt").renderer.enabled = false;
+				transform.FindChild("PlanetArt").renderer.enabled = false;				
+				up.GetComponent<Building>().Reset();
+				down.GetComponent<Building>().Reset();
+				left.GetComponent<Building>().Reset();
+				right.GetComponent<Building>().Reset();
+				selected.GetComponent<Building>().UnSelected();
 				GameState.gameOver = true;
 				NetworkManager.is_gameOver = true;
 				AI.is_ai = false;
@@ -217,6 +226,11 @@ public class PlanetaryControls: MonoBehaviour {
 			healthBar.GetComponent<ProgressBar>().measure = planetaryHealth;
 			if(planetaryHealth < 1 && !NetworkManager.is_gameOver){
 				transform.FindChild("PlanetArt").renderer.enabled = false;
+				up.GetComponent<Building>().Reset();
+				down.GetComponent<Building>().Reset();
+				left.GetComponent<Building>().Reset();
+				right.GetComponent<Building>().Reset();
+				selected.GetComponent<Building>().UnSelected();
 				particleSystem.Play();
 				GetComponent<AudioSource>().Play();
 				GameState.gameOver = true;

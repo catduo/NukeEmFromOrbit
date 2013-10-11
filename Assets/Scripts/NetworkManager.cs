@@ -22,7 +22,7 @@ public class NetworkManager : MonoBehaviour {
 	static public string winningPlayerText;
 	 
 	private void StartServer(){
-	    Network.InitializeServer(2, 25000, !Network.HavePublicAddress());
+	    Network.InitializeServer(1, 25000, !Network.HavePublicAddress());
 	    MasterServer.RegisterHost(typeName, gameName);
 	}
 	
@@ -90,145 +90,122 @@ public class NetworkManager : MonoBehaviour {
 				is_credits = false;
 			}
 		}
-		else{
-			if(is_instructions){
-		        if (GUI.Button(new Rect(300, 560, 250, 40), "")){
-					GameObject.Find ("MainCamera").transform.position = new Vector3 (0,0,-20);
-					is_instructions = false;
-					is_menu = true;
-					GameObject.Find ("NewGame").GetComponent<NewGame>().Tap();
-				}
+		else if(is_instructions){
+	        if (GUI.Button(new Rect(300, 560, 250, 40), "")){
+				GameObject.Find ("MainCamera").transform.position = new Vector3 (0,0,-20);
+				is_instructions = false;
+				is_menu = true;
+				GameObject.Find ("NewGame").GetComponent<NewGame>().Tap();
 			}
-			else if(is_menu){
-				if (Network.connections.Length == 0){
-				    if (!is_online && !is_local || AI.is_ai){
-						GUI.Box(new Rect(300,20,250,40), "Nuke 'Em From Orbit!");
-						is_looking = false;
-				        if (GUI.Button(new Rect(350, 100, 150, 50), "Play Online")){
-				            is_online = true;
-							is_looking = true;
-							AI.is_ai = false;
-						}
-				        if (GUI.Button(new Rect(350, 200, 150, 50), "Single Player")){
-							is_local = true;
-							AI.is_ai = false;
-						}
-				        if (GUI.Button(new Rect(350, 300, 150, 50), "Instructions")){
-							GameObject.Find ("MainCamera").transform.position = new Vector3 (0,15,-20);
-							is_instructions = true;
-						}
-				        if (GUI.Button(new Rect(350, 400, 150, 50), "Credits")){
-							is_credits = true;
-						}
-				        if (GUI.Button(new Rect(600, 300, 100, 50), "Mute")){
-							if(AudioListener.volume == 1){
-								AudioListener.volume = 0;
-							}
-							else{
-								AudioListener.volume = 1;
-							}
-						}
+		}
+		else if(is_menu){
+			if (Network.connections.Length == 0){
+			    if (!is_online && !is_local || AI.is_ai){
+					GUI.Box(new Rect(300,20,250,40), "Nuke 'Em From Orbit!");
+					is_looking = false;
+			        if (GUI.Button(new Rect(350, 100, 150, 50), "Play Online")){
+			            is_online = true;
+						is_looking = true;
+						AI.is_ai = false;
 					}
-					else if (is_looking){
-						GUI.Box(new Rect(330, 100, 190, 50), "Looking for Players...");
-						if (GUI.Button(new Rect(350, 200, 150, 50), "Stop Looking")){
-							is_looking = false;
-							is_online = false;
-							Disconnect();
-						}
-				        if (GUI.Button(new Rect(350, 300, 150, 50), "Instructions")){
-							GameObject.Find ("MainCamera").transform.position = new Vector3 (0,15,-20);
-							is_instructions = true;
-						}
-				        if (GUI.Button(new Rect(350, 400, 150, 50), "Credits")){
-							GameObject.Find ("MainCamera").transform.position = new Vector3 (0,15,-20);
-							is_instructions = true;
-						}
+			        if (GUI.Button(new Rect(350, 200, 150, 50), "Single Player")){
+						is_local = true;
+						AI.is_ai = false;
 					}
-					else if(is_local){
-						GUI.Box(new Rect(300,50,150,50), "Choose Difficulty");
-						if (GUI.Button(new Rect(275, 100, 100, 50), "1")){
-							GameObject.Find ("MainCamera").GetComponent<AI>().difficulty = 0;
-							GameObject.Find ("NewGame").GetComponent<NewGame>().Tap();
-							GameObject.Find ("MainCamera").GetComponent<AI>().Setup();
-							is_menu = false;
-						}
-						if (GUI.Button(new Rect(275, 150, 100, 50), "2")){
-							GameObject.Find ("MainCamera").GetComponent<AI>().difficulty = 1;
-							GameObject.Find ("NewGame").GetComponent<NewGame>().Tap();
-							GameObject.Find ("MainCamera").GetComponent<AI>().Setup();
-							is_menu = false;
-						}
-						if (GUI.Button(new Rect(275, 200, 100, 50), "3")){
-							GameObject.Find ("MainCamera").GetComponent<AI>().difficulty = 2;
-							GameObject.Find ("NewGame").GetComponent<NewGame>().Tap();
-							GameObject.Find ("MainCamera").GetComponent<AI>().Setup();
-							is_menu = false;
-						}
-						if (GUI.Button(new Rect(275, 250, 100, 50), "4")){
-							GameObject.Find ("MainCamera").GetComponent<AI>().difficulty = 3;
-							GameObject.Find ("NewGame").GetComponent<NewGame>().Tap();
-							GameObject.Find ("MainCamera").GetComponent<AI>().Setup();
-							is_menu = false;
-						}
-						if (GUI.Button(new Rect(275, 300, 100, 50), "5")){
-							GameObject.Find ("MainCamera").GetComponent<AI>().difficulty = 4;
-							GameObject.Find ("NewGame").GetComponent<NewGame>().Tap();
-							GameObject.Find ("MainCamera").GetComponent<AI>().Setup();
-							is_menu = false;
-						}
-						if (GUI.Button(new Rect(375, 100, 100, 50), "6")){
-							GameObject.Find ("MainCamera").GetComponent<AI>().difficulty = 5;
-							GameObject.Find ("NewGame").GetComponent<NewGame>().Tap();
-							GameObject.Find ("MainCamera").GetComponent<AI>().Setup();
-							is_menu = false;
-						}
-						if (GUI.Button(new Rect(375, 150, 100, 50), "7")){
-							GameObject.Find ("MainCamera").GetComponent<AI>().difficulty = 6;
-							GameObject.Find ("NewGame").GetComponent<NewGame>().Tap();
-							GameObject.Find ("MainCamera").GetComponent<AI>().Setup();
-							is_menu = false;
-						}
-						if (GUI.Button(new Rect(375, 200, 100, 50), "8")){
-							GameObject.Find ("MainCamera").GetComponent<AI>().difficulty = 7;
-							GameObject.Find ("NewGame").GetComponent<NewGame>().Tap();
-							GameObject.Find ("MainCamera").GetComponent<AI>().Setup();
-							is_menu = false;
-						}
-						if (GUI.Button(new Rect(375, 250, 100, 50), "9")){
-							GameObject.Find ("MainCamera").GetComponent<AI>().difficulty = 8;
-							GameObject.Find ("NewGame").GetComponent<NewGame>().Tap();
-							GameObject.Find ("MainCamera").GetComponent<AI>().Setup();
-							is_menu = false;
-						}
-						if (GUI.Button(new Rect(375, 300, 100, 50), "10")){
-							GameObject.Find ("MainCamera").GetComponent<AI>().difficulty = 9;
-							GameObject.Find ("NewGame").GetComponent<NewGame>().Tap();
-							GameObject.Find ("MainCamera").GetComponent<AI>().Setup();
-							is_menu = false;
-						}
+			        if (GUI.Button(new Rect(350, 300, 150, 50), "Instructions")){
+						GameObject.Find ("MainCamera").transform.position = new Vector3 (0,15,-20);
+						is_instructions = true;
 					}
-				    if (GUI.Button(new Rect(30, 275, 100, 50), "Menu")){
-						if(is_menu){
-							is_menu = false;
+			        if (GUI.Button(new Rect(350, 400, 150, 50), "Credits")){
+						is_credits = true;
+					}
+			        if (GUI.Button(new Rect(600, 300, 100, 50), "Mute")){
+						if(AudioListener.volume == 1){
+							AudioListener.volume = 0;
 						}
 						else{
-							is_menu = true;
+							AudioListener.volume = 1;
 						}
 					}
 				}
-				else if(!is_ready && !is_looking && is_online){
-					if (GUI.Button(new Rect(300, 250, 250, 100), "Ready!")){
-						is_ready = true;
-						NewGame.readyCount++;
-						GameObject.Find ("Player1Planet").GetComponent<PlanetaryControls>().Ready();
+				else if (is_looking){
+					GUI.Box(new Rect(330, 100, 190, 50), "Looking for Players...");
+					if (GUI.Button(new Rect(350, 200, 150, 50), "Stop Looking")){
+						is_looking = false;
+						is_online = false;
+						Disconnect();
+					}
+			        if (GUI.Button(new Rect(350, 300, 150, 50), "Instructions")){
+						GameObject.Find ("MainCamera").transform.position = new Vector3 (0,15,-20);
+						is_instructions = true;
+					}
+			        if (GUI.Button(new Rect(350, 400, 150, 50), "Credits")){
+						GameObject.Find ("MainCamera").transform.position = new Vector3 (0,15,-20);
+						is_credits = true;
 					}
 				}
-				else if (NewGame.readyCount == 2 && !is_looking && is_online){
-					GUI.Box(new Rect(300,100,250,100), "Waiting for other Players...");
-				}
-				else{
-					is_menu = false;
+				else if(is_local){
+					GUI.Box(new Rect(300,50,150,50), "Choose Difficulty");
+					if (GUI.Button(new Rect(275, 100, 100, 50), "1")){
+						GameObject.Find ("MainCamera").GetComponent<AI>().difficulty = 0;
+						GameObject.Find ("NewGame").GetComponent<NewGame>().Tap();
+						GameObject.Find ("MainCamera").GetComponent<AI>().Setup();
+						is_menu = false;
+					}
+					if (GUI.Button(new Rect(275, 150, 100, 50), "2")){
+						GameObject.Find ("MainCamera").GetComponent<AI>().difficulty = 1;
+						GameObject.Find ("NewGame").GetComponent<NewGame>().Tap();
+						GameObject.Find ("MainCamera").GetComponent<AI>().Setup();
+						is_menu = false;
+					}
+					if (GUI.Button(new Rect(275, 200, 100, 50), "3")){
+						GameObject.Find ("MainCamera").GetComponent<AI>().difficulty = 2;
+						GameObject.Find ("NewGame").GetComponent<NewGame>().Tap();
+						GameObject.Find ("MainCamera").GetComponent<AI>().Setup();
+						is_menu = false;
+					}
+					if (GUI.Button(new Rect(275, 250, 100, 50), "4")){
+						GameObject.Find ("MainCamera").GetComponent<AI>().difficulty = 3;
+						GameObject.Find ("NewGame").GetComponent<NewGame>().Tap();
+						GameObject.Find ("MainCamera").GetComponent<AI>().Setup();
+						is_menu = false;
+					}
+					if (GUI.Button(new Rect(275, 300, 100, 50), "5")){
+						GameObject.Find ("MainCamera").GetComponent<AI>().difficulty = 4;
+						GameObject.Find ("NewGame").GetComponent<NewGame>().Tap();
+						GameObject.Find ("MainCamera").GetComponent<AI>().Setup();
+						is_menu = false;
+					}
+					if (GUI.Button(new Rect(375, 100, 100, 50), "6")){
+						GameObject.Find ("MainCamera").GetComponent<AI>().difficulty = 5;
+						GameObject.Find ("NewGame").GetComponent<NewGame>().Tap();
+						GameObject.Find ("MainCamera").GetComponent<AI>().Setup();
+						is_menu = false;
+					}
+					if (GUI.Button(new Rect(375, 150, 100, 50), "7")){
+						GameObject.Find ("MainCamera").GetComponent<AI>().difficulty = 6;
+						GameObject.Find ("NewGame").GetComponent<NewGame>().Tap();
+						GameObject.Find ("MainCamera").GetComponent<AI>().Setup();
+						is_menu = false;
+					}
+					if (GUI.Button(new Rect(375, 200, 100, 50), "8")){
+						GameObject.Find ("MainCamera").GetComponent<AI>().difficulty = 7;
+						GameObject.Find ("NewGame").GetComponent<NewGame>().Tap();
+						GameObject.Find ("MainCamera").GetComponent<AI>().Setup();
+						is_menu = false;
+					}
+					if (GUI.Button(new Rect(375, 250, 100, 50), "9")){
+						GameObject.Find ("MainCamera").GetComponent<AI>().difficulty = 8;
+						GameObject.Find ("NewGame").GetComponent<NewGame>().Tap();
+						GameObject.Find ("MainCamera").GetComponent<AI>().Setup();
+						is_menu = false;
+					}
+					if (GUI.Button(new Rect(375, 300, 100, 50), "10")){
+						GameObject.Find ("MainCamera").GetComponent<AI>().difficulty = 9;
+						GameObject.Find ("NewGame").GetComponent<NewGame>().Tap();
+						GameObject.Find ("MainCamera").GetComponent<AI>().Setup();
+						is_menu = false;
+					}
 				}
 			    if (GUI.Button(new Rect(30, 275, 100, 50), "Menu")){
 					if(is_menu){
@@ -238,6 +215,19 @@ public class NetworkManager : MonoBehaviour {
 						is_menu = true;
 					}
 				}
+			}
+			else if(!is_ready && !is_looking && is_online){
+				if (GUI.Button(new Rect(300, 250, 250, 100), "Ready!")){
+					is_ready = true;
+					NewGame.readyCount++;
+					GameObject.Find ("Player1Planet").GetComponent<PlanetaryControls>().Ready();
+				}
+			}
+			else if (NewGame.readyCount == 2 && !is_looking && is_online){
+				GUI.Box(new Rect(300,100,250,100), "Waiting for other Players...");
+			}
+			else{
+				is_menu = false;
 			}
 		    if (GUI.Button(new Rect(30, 275, 100, 50), "Menu")){
 				if(is_menu){
