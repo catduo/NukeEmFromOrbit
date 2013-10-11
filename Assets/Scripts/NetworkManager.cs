@@ -17,6 +17,7 @@ public class NetworkManager : MonoBehaviour {
 	private bool is_instructions = false;
 	static public bool is_menu = true;
 	static public bool is_gameOver = false;
+	private bool is_credits = false;
 	public Font font;
 	static public string winningPlayerText;
 	 
@@ -79,12 +80,23 @@ public class NetworkManager : MonoBehaviour {
 				is_menu = true;
 			}
 		}
+		else if (is_credits){
+			GUI.Box(new Rect(150,100,600,300), "Thank you for Playing!\nDesigner and Developer: David Geisert\nDesigner and Artist: Stephanie Lee\nAssisting Development: Julian Hartline\nAssisting Design: Mohamed Kazzaz\n\nMusic: Alexandr Zhelanov\nhttp://opengameart.org/content/space-1\n\nSound Effects: AstroMenace Artwork ver 1.2 \nAssets Copyright (c) 2006-2007 \nMichael Kurinnoy, Viewizard\nhttp://opengameart.org/content/space-battle-game-sounds-astromenace\n\nFor information contact dg@catduo.com\n or visit catduo.com");
+			if (GUI.Button(new Rect(300,400,250,100), "Main Menu")){
+				is_gameOver = false;
+				is_online = false;
+				is_local = false;
+				is_menu = true;
+				is_credits = false;
+			}
+		}
 		else{
 			if(is_instructions){
 		        if (GUI.Button(new Rect(300, 560, 250, 40), "")){
 					GameObject.Find ("MainCamera").transform.position = new Vector3 (0,0,-20);
 					is_instructions = false;
 					is_menu = true;
+					GameObject.Find ("NewGame").GetComponent<NewGame>().Tap();
 				}
 			}
 			else if(is_menu){
@@ -105,15 +117,22 @@ public class NetworkManager : MonoBehaviour {
 							GameObject.Find ("MainCamera").transform.position = new Vector3 (0,15,-20);
 							is_instructions = true;
 						}
+				        if (GUI.Button(new Rect(350, 400, 150, 50), "Credits")){
+							is_credits = true;
+						}
 					}
 					else if (is_looking){
-						GUI.Box(new Rect(350, 100, 150, 50), "Looking for Players...");
+						GUI.Box(new Rect(330, 100, 190, 50), "Looking for Players...");
 						if (GUI.Button(new Rect(350, 200, 150, 50), "Stop Looking")){
 							is_looking = false;
 							is_online = false;
 							Disconnect();
 						}
 				        if (GUI.Button(new Rect(350, 300, 150, 50), "Instructions")){
+							GameObject.Find ("MainCamera").transform.position = new Vector3 (0,15,-20);
+							is_instructions = true;
+						}
+				        if (GUI.Button(new Rect(350, 300, 150, 50), "Credits")){
 							GameObject.Find ("MainCamera").transform.position = new Vector3 (0,15,-20);
 							is_instructions = true;
 						}
