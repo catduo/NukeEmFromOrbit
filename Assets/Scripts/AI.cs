@@ -78,10 +78,10 @@ public class AI : MonoBehaviour {
 	void SetBuildings () {
 		switch(difficulty){
 		case 0:
-			Scroll(left, 0);
-			Scroll(down, 0);
-			Scroll(right, 0);
-			Scroll(up, 0);
+			Scroll(left, 5);
+			Scroll(down, 5);
+			Scroll(right, 5);
+			Scroll(up, 5);
 			break;
 		case 1:
 			Scroll(left, 1);
@@ -91,21 +91,21 @@ public class AI : MonoBehaviour {
 			break;
 		case 2:
 			Scroll(left, 1);
-			Scroll(down, 0);
+			Scroll(down, 5);
 			Scroll(right, 1);
-			Scroll(up, 0);
+			Scroll(up, 5);
 			break;
 		case 3:
 			Scroll(left, 3);
 			Scroll(down, 3);
-			Scroll(right, 0);
+			Scroll(right, 5);
 			Scroll(up, 3);
 			break;
 		case 4:
 			Scroll(left, 3);
 			Scroll(down, 1);
 			Scroll(right, 3);
-			Scroll(up, 0);
+			Scroll(up, 5);
 			break;
 		case 5:
 			Scroll(left, 4);
@@ -121,18 +121,18 @@ public class AI : MonoBehaviour {
 			break;
 		case 7:
 			Scroll(left, 4);
-			Scroll(down, 0);
-			Scroll(right, 0);
+			Scroll(down, 5);
+			Scroll(right, 5);
 			Scroll(up, 3);
 			break;
 		case 8:
 			Scroll(left, 1);
 			Scroll(down, 3);
-			Scroll(right, 0);
+			Scroll(right, 5);
 			Scroll(up, 4);
 			break;
 		case 9:
-			Scroll(left, 0);
+			Scroll(left, 5);
 			Scroll(down, 3);
 			Scroll(right, 2);
 			Scroll(up, 4);

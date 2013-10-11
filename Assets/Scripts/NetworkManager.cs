@@ -132,7 +132,7 @@ public class NetworkManager : MonoBehaviour {
 							GameObject.Find ("MainCamera").transform.position = new Vector3 (0,15,-20);
 							is_instructions = true;
 						}
-				        if (GUI.Button(new Rect(350, 300, 150, 50), "Credits")){
+				        if (GUI.Button(new Rect(350, 400, 150, 50), "Credits")){
 							GameObject.Find ("MainCamera").transform.position = new Vector3 (0,15,-20);
 							is_instructions = true;
 						}
