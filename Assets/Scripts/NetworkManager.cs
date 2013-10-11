@@ -120,6 +120,14 @@ public class NetworkManager : MonoBehaviour {
 				        if (GUI.Button(new Rect(350, 400, 150, 50), "Credits")){
 							is_credits = true;
 						}
+				        if (GUI.Button(new Rect(600, 300, 100, 50), "Mute")){
+							if(AudioListener.volume == 1){
+								AudioListener.volume = 0;
+							}
+							else{
+								AudioListener.volume = 1;
+							}
+						}
 					}
 					else if (is_looking){
 						GUI.Box(new Rect(330, 100, 190, 50), "Looking for Players...");
