@@ -34,7 +34,6 @@ public class AI : MonoBehaviour {
 		GetCosts();
 		is_ai = true;
 		aiPlanet.GetComponent<PlanetaryControls>().Remote("client");
-		aiDelay = 0.9F - difficulty / 10;
 	}
 	
 	// Update is called once per frame
@@ -82,60 +81,70 @@ public class AI : MonoBehaviour {
 			Scroll(down, 5);
 			Scroll(right, 5);
 			Scroll(up, 5);
+			aiDelay = 1.2F;
 			break;
 		case 1:
 			Scroll(left, 1);
 			Scroll(down, 1);
 			Scroll(right, 1);
 			Scroll(up, 1);
+			aiDelay = 0.7F;
 			break;
 		case 2:
 			Scroll(left, 1);
 			Scroll(down, 5);
 			Scroll(right, 1);
 			Scroll(up, 5);
+			aiDelay = 0.6F;
 			break;
 		case 3:
 			Scroll(left, 3);
 			Scroll(down, 3);
 			Scroll(right, 5);
 			Scroll(up, 3);
+			aiDelay = 0.5F;
 			break;
 		case 4:
 			Scroll(left, 3);
 			Scroll(down, 1);
 			Scroll(right, 3);
 			Scroll(up, 5);
+			aiDelay = 0.4F;
 			break;
 		case 5:
 			Scroll(left, 4);
 			Scroll(down, 1);
 			Scroll(right, 1);
 			Scroll(up, 1);
+			aiDelay = 0.3F;
 			break;
 		case 6:
 			Scroll(left, 4);
 			Scroll(down, 1);
 			Scroll(right, 1);
 			Scroll(up, 3);
+			aiDelay = 0.25F;
 			break;
 		case 7:
 			Scroll(left, 4);
 			Scroll(down, 5);
 			Scroll(right, 5);
 			Scroll(up, 3);
+			aiDelay = 0.2F;
 			break;
 		case 8:
 			Scroll(left, 1);
 			Scroll(down, 3);
 			Scroll(right, 5);
 			Scroll(up, 4);
+			aiDelay = 0.1F;
 			break;
 		case 9:
 			Scroll(left, 5);
 			Scroll(down, 3);
 			Scroll(right, 2);
 			Scroll(up, 4);
+			aiDelay = 0.05F;
 			break;
 		default:
 			break;
